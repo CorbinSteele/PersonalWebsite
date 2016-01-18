@@ -1,0 +1,6 @@
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\PersonalWebsite.dll.config
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\PersonalWebsite.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\PersonalWebsite.pdb
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Release\PersonalWebsite.csprojResolveAssemblyReference.cache
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Release\PersonalWebsite.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Release\PersonalWebsite.pdb
