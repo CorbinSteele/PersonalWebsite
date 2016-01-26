@@ -1,0 +1,70 @@
+﻿.title-text > h2
+{
+    font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
+    color: #2a9fd6;
+    margin-bottom: 10px;
+}
+.results-table {
+    padding: 0px 20px;
+}
+.tr-ng-grid .tr-ng-sort .tr-ng-sort-inactive {
+    display: none;
+}
+.pagination>li>a:focus {
+    outline: none;
+    background-color: #222222;
+}
+.pagination>li>a:hover {
+    outline: inherit !important;
+    background-color: #2a9fd6 !important;
+}
+
+.carFinderApp .table {
+    margin-top: 20px;
+}
+.table-hover>tbody>tr {
+    cursor: pointer;
+}
+.table>tbody>tr>td.data-label {
+    text-align: right;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: bold;
+    font-variant: small-caps;
+}
+.table>thead>tr>th.data-label, button.close-recall {
+    font-variant: small-caps;
+}.table>thead>tr>th.data-label, button.close-recall {
+    font-variant: small-caps;
+}
+ button.close-recall {
+    background-color: #2a9fd6;
+    font-size: 16px;
+    padding: 0px 10px;
+    color: #222222;
+    float: right;
+ }
+
+.carFinderApp {
+    font-size: 18px;
+}
+
+.carousel-inner {
+    width: 400px;
+    margin: auto;
+}
+.carousel-inner > .item {
+    height: 300px;
+}
+.carousel-inner > .item > img {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+}
+.carousel-control:focus {
+    opacity: 0.5;
+}
+.carousel-control:hover {
+    opacity: 0.9 !important;
+}

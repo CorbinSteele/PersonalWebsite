@@ -1,0 +1,212 @@
+﻿<div class="container carFinderApp" ng-app="CarFinderApp">
+    <div ng-controller="CarFinderController as apiCtrl">
+        <div class="sub-container-outer">
+            <div class="sub-container-inner">
+                <div class="title-text text-center">
+                    <h2>Car Finder</h2>
+                </div>
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label for="select" class="col-xs-12 control-label">Year</label>
+                                <select class="form-control" ng-model="apiCtrl.input.year" ng-change="apiCtrl.updateYears()"
+                                        ng-options="year for year in apiCtrl.output.years" ng-disabled="apiCtrl.output.years.length == 0">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="select" class="col-xs-12 control-label">Make</label>
+                                <select class="form-control" ng-model="apiCtrl.input.make" ng-change="apiCtrl.updateMakes()"
+                                        ng-options="make for make in apiCtrl.output.makes" ng-disabled="apiCtrl.output.years.length == 0">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="select" class="col-xs-12 control-label">Model</label>
+                                <select class="form-control" ng-model="apiCtrl.input.model" ng-change="apiCtrl.updateModels()"
+                                        ng-options="model for model in apiCtrl.output.models" ng-disabled="apiCtrl.output.years.length == 0">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="select" class="col-xs-12 control-label">Trim</label>
+                                <select class="form-control" ng-model="apiCtrl.input.trim" ng-change="apiCtrl.updateTrims()"
+                                        ng-options="trim for trim in apiCtrl.output.trims" ng-disabled="apiCtrl.output.years.length == 0">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="select" class="col-xs-12 control-label">Style</label>
+                                <select class="form-control" ng-model="apiCtrl.input.style" ng-change="apiCtrl.updateStyles()"
+                                        ng-options="style for style in apiCtrl.output.styles" ng-disabled="apiCtrl.output.years.length == 0">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="results-table" ng-show="apiCtrl.output.cars.length > 0">
+                <table class="table-striped" tr-ng-grid="" items="apiCtrl.output.cars" selection-mode="None" page-items="10" enable-filtering="false">
+                    <thead>
+                        <tr>
+                            <th field-name="Model_Year" display-name="Year" display-align="right" />
+                            <th field-name="Make_Display" display-name="Make" />
+                            <th field-name="Model_Name" display-name="Model" />
+                            <th field-name="Model_Trim" display-name="Trim" />
+                            <th field-name="body_style" display-name="Style" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-click="apiCtrl.showCar(apiCtrl.output.cars.indexOf(gridItem))" />
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div ng-show="apiCtrl.searching">
+            <img class="img-responsive img-rounded" style="margin:auto" ng-src="/img/video-loading.gif" />
+        </div>
+
+        <div modal-show="apiCtrl.showDialog" class="modal fade" id="modal-car" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">
+                            {{ apiCtrl.output.car.Model_Year}} {{ apiCtrl.output.car.Make_Display }}
+                            {{ apiCtrl.output.car.Model_Name }} {{ apiCtrl.output.car.Model_Trim }}
+                        </h4>
+                    </div>
+                    <div class="modal-body" style="padding-top: 0px;">
+                        <div class="sub-container-inner">
+                            <div class="row" id="normal">
+                                <div class="col-md-6">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="data-label text-center" colspan="2">
+                                                    Details
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="data-label">Body Style:</td>
+                                                <td>{{ apiCtrl.output.car.body_style }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Weight (kg):</td>
+                                                <td>{{ apiCtrl.output.car.weight_kg }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Transmission Type:</td>
+                                                <td>{{ apiCtrl.output.car.transmission_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Drive Type:</td>
+                                                <td>{{ apiCtrl.output.car.drive_type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Fuel Type:</td>
+                                                <td>{{ apiCtrl.output.car.engine_fuel }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Fuel Capacity (L):</td>
+                                                <td>{{ apiCtrl.output.car.fuel_capacity_l }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Cylinders:</td>
+                                                <td>{{ apiCtrl.output.car.engine_num_cyl }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Horsepower (PS):</td>
+                                                <td>{{ apiCtrl.output.car.engine_power_ps }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">RPM:</td>
+                                                <td>{{ apiCtrl.output.car.engine_power_rpm }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Doors:</td>
+                                                <td>{{ apiCtrl.output.car.doors }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="data-label">Seats:</td>
+                                                <td>{{ apiCtrl.output.car.seats }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <uib-carousel interval="slideSpeed">
+                                        <uib-slide ng-repeat="imageUrl in apiCtrl.output.car.ImageUrls">
+                                            <img class="img-rounded" ng-src="{{imageUrl}}" width="350" />
+                                        </uib-slide>
+                                    </uib-carousel>
+                                    <div class="recalls-list" ng-show="apiCtrl.output.car.Recalls.length > 0">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="data-label">
+                                                        Recalls
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="recall in apiCtrl.output.car.Recalls" ng-click="apiCtrl.showRecall($index)">
+                                                    <td class="data-label">{{recall.Component}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="recall" style="display:none;">
+                                <table class="table table-striped" style="border-bottom: solid 1px #222222; margin-bottom: 1px;">
+                                    <thead>
+                                        <tr>
+                                            <th class="data-label text-center" colspan="4">
+                                                Manufacturer: {{ apiCtrl.output.car.currentRecall.Manufacturer }}
+                                                <button type="button" class="btn close-recall" ng-click="apiCtrl.hideRecall()">Close</button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="data-label">NHTSA Campaign Number:</td>
+                                            <td>{{ apiCtrl.output.car.currentRecall.NHTSACampaignNumber }}</td>
+                                            <td class="data-label">Report Received On:</td>
+                                            <td>{{ apiCtrl.output.car.currentRecall.ReportReceivedDate | limitTo : 10}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-striped" style="margin-top: 0px;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="data-label">Component:</td>
+                                            <td>{{ apiCtrl.output.car.currentRecall.Component }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="data-label">Summary:</td>
+                                            <td>{{ apiCtrl.output.car.currentRecall.Summary }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="data-label">Consequence:</td>
+                                            <td>{{ apiCtrl.output.car.currentRecall.Conequence }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="data-label">Remedy:</td>
+                                            <td>{{ apiCtrl.output.car.currentRecall.Remedy }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

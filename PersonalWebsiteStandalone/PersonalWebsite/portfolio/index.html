@@ -1,0 +1,346 @@
+<html>
+    <head>
+        <title>Website Draft</title>
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/assets/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/assets/css/prism.css" />
+        <link rel="stylesheet" href="../assets/css/custom.css" />
+        <link rel="stylesheet" href="/assets/css/javascript-exercises.css" />
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <script src="/assets/js/custom.js"></script>
+        <script src="/assets/js/javascriptExercises.js"></script>
+        <script src="/assets/js/prism.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid" style="margin:0px 10%;">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsible-navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-brand">Portfolio</div>
+                </div>
+                <div class="collapse navbar-collapse" id="collapsible-navbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/portfolio">Portfolio</a></li>
+                        <li><a href="/resume">Resume</a></li>
+                        <!--
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        -->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="sub-container-outer">
+                <a href="" data-toggle="modal" data-target="#modal-js" onclick="focusModal(null, 33, 1200)">
+                    <div class="row">
+                        <h3>Javascript Exercises</h3>
+                        <div class="col-sm-5">
+                            <div class="col-sm-12 col-sm-offset-1 col-md-11">
+                                <img src="/assets/img/javascript-expanded.png" class="img-responsive img-rounded center-block" alt="image" width="360" />
+                            </div>
+                            &nbsp;
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="sub-container-inner" style="margin-top:0;">
+                                <p>
+                                    Multiple small Javascript exercises, all with source code and simple interfaces.
+                                    The exercises include multiple examples of complex logic expressions,
+                                    looping constructs, string and number manipulation,
+                                    creative use of anonymous objects and functions,
+                                    extensive use of the JQuery and Javascript libraries,
+                                    and even one particularly interesting use of Infinity.
+                                    There are only four exercises, so it won't cost too much time to check them all out!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!--
+            <div class="sub-container-outer">
+                <div class="row">
+                    <h3>Project Title</h3>
+                    <div class="col-sm-5">
+                        <div class="col-sm-12 col-sm-offset-1 col-md-11">
+                            <img src="/assets/temp/360-temp.png" class="img-responsive center-block" alt="image" width="360" />
+                        </div>
+                        &nbsp;
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="sub-container-inner" style="margin-top:0;">
+                            <p>
+                                stuff stuff stuff
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+
+        <div class="modal fade" id="modal-js" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Javascript Exercises</h4>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#home" aria-expanded="true" onclick="return focusModal(this, 33, 500)">Home</a></li>
+                            <li class=""><a href="#analyzeNumbers" aria-expanded="false" onclick="return focusModal(this, 80, 600)">Analyze Numbers</a></li>
+                            <li class=""><a href="#factorial" aria-expanded="false" onclick="return focusModal(this, 0, 500)">Factorial</a></li>
+                            <li class=""><a href="#fizzBuzz" aria-expanded="false" onclick="return focusModal(this, 0, 500)">FizzBuzz</a></li>
+                            <li class=""><a href="#palindrome" aria-expanded="false" onclick="return focusModal(this, 33, 500)">Palindrome</a></li>
+                        </ul>
+                        <div id="jsExercisesTabContent" class="tab-content">
+                            <div class="tab-pane fade active in row" id="home">
+                                <div class="col-lg-4 padded">
+                                    <div style="margin: 15px;">
+                                        All Javascript exercises here make use of these custom functions
+                                        to handle input and output. The exercises themselves are designed
+                                        to work completely independently of the user interface, preserving
+                                        the distinction between the view and the control.
+                                        <br /><br />
+                                        Whenever you click the "Submit" button, the currently visible method
+                                        whose name begins with "submit" is immediately called. Absolutely
+                                        no code is hidden, although comments are excluded for brevity.
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 padded">
+                                    <pre>
+<code class="language-javascript line-numbers">function getInput() {
+    var $input = $("#jsExercisesTabContent > .active .jsInput");
+    return ($input.length == 1) ? $input.val().trim() :
+        $input.map(function () { return $(this).val().trim(); }).get();
+}
+function setOutput(value) {
+    var $output = $("#jsExercisesTabContent > .active .jsOutput");
+    var outputValue = asStringArray(value);
+    var outputLength = outputValue.length / $output.length;
+    $output.each(function (index, output) {
+        $(output).val(outputValue
+            .slice(outputLength * index, outputLength * (index + 1))
+            .join("\n"));
+    });
+    $output.collapse('show');
+}
+function asStringArray(obj) {
+    var str = [];
+    for (var p in obj)
+        if (obj.hasOwnProperty(p))
+            str.push(p + ": " + obj[p]);
+    return str;
+}
+</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade row" id="analyzeNumbers" data-action="submitNumbersToAnalyze">
+                                <div class="col-lg-5 padded">
+                                    <div style="margin: 15px;">
+                                        Enter a list of numbers separated by spaces into the box below.
+                                        <br />
+                                        This Javascript program will then analyze the numbers
+                                        and report the smallest number, the largest number, the sum of the
+                                        numbers, the product of the numbers, and the mean of the numbers.
+                                        <br />
+                                        Anything in the box that is not a number will be ignored by the program.
+                                    </div>
+                                    <div class="well">
+                                        <textarea rows="7" class="jsInput" style="resize:none; width:100%;"></textarea>
+                                        <textarea readonly rows="5" class="collapse jsOutput" style="resize:none; width:100%;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7 padded">
+                                    <pre>
+<code class="language-javascript line-numbers">function analyzeNumbers(numbers) {
+    if (!numbers.length)
+        return { Error: "There were no numbers." };
+    var least = greatest = sum = product = numbers[0];
+    for (i = 1; i < numbers.length; i++) {
+        var number = numbers[i];
+        if (number < least)
+            least = number;
+        if (number > greatest)
+            greatest = number;
+        sum += number;
+        product *= number;
+    }
+    var mean = sum / numbers.length;
+    return {
+        Least: least, Greatest: greatest,
+        Sum: sum, Product: product, Mean: mean
+    };
+}
+function submitNumbersToAnalyze() {
+    var numbers = getInput().split(/\s+/).map(Number)
+                  .filter(function (number, _, __) {
+                      return number === number;
+                  });    
+    setOutput(analyzeNumbers(getInput() ? numbers : []));
+}</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade row" id="factorial" data-action="submitNumberToFactorialize">
+                                <div class="col-lg-5 padded">
+                                    <div style="margin: 15px;">
+                                        Enter an integer into the box below.
+                                        <br />
+                                        This Javascript program will then report the factorial of that integer to you.
+                                        <br />
+                                        Real numbers that are not integers, while they do have factorials, are
+                                        beyond the scope of this code. Negative integers have no factorial,
+                                        and anything that is not a number will obviously not have a factorial either.
+                                    </div>
+                                    <div class="well">
+                                        <textarea rows="1" class="jsInput" style="resize:none; width:100%;"></textarea>
+                                        <textarea readonly rows="1" class="collapse jsOutput" style="resize:none; width:100%; margin-top:10px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7 padded">
+                                    <pre>
+<code class="language-javascript line-numbers">function factorial(number) {
+    var factorial = 1;
+    for (i = number; i > 0; i--)
+        factorial *= i;
+    return factorial;
+}
+function submitNumberToFactorialize() {
+    var number = Number(getInput());
+    if (number % 1 && number != 0)
+        setOutput({
+            Error: "It's too hard to calculate that!"
+        });
+    else if (getInput() && number >= 0)
+        setOutput({ Factorial: factorial(number) });
+    else
+        setOutput({ Fact: "That has no factorial." });
+}</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade row" id="fizzBuzz" data-action="submitNumbersToFizzBuzz">
+                                <div class="col-lg-6 padded">
+                                    <div style="margin: 15px;">
+                                        Enter two numbers into the boxes below.
+                                        <br />
+                                        This Javascript program will then list all of the numbers between 1 and 100,
+                                        except with all numbers divisible by your first number replaced with "Fizz",
+                                        all numbers divisible by your second number replaced with "Buzz",
+                                        and all numbers divisible by both of your numbers replaced with "FizzBuzz".
+                                        <br />
+                                        Anything in the box that is not a number will be ignored by the program.
+                                    </div>
+                                    <div class="row well">
+                                        <div class="col-sm-6">
+                                            <textarea rows="1" class="jsInput" style="resize:none; width:100%;"></textarea>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <textarea rows="1" class="jsInput" style="resize:none; width:100%;"></textarea>
+                                        </div>
+                                        <div class="col-sm-12 merged-textarea">
+                                            <textarea readonly rows="6" class="collapse jsOutput" style="max-height:124px; resize:none; width:31%; float:left; overflow:hidden;"></textarea>
+                                            <textarea readonly rows="6" class="collapse jsOutput" style="max-height:124px; resize:none; width:31%; float:left; overflow:hidden;"></textarea>
+                                            <textarea readonly rows="6" class="collapse jsOutput" style="max-height:124px; resize:none; width:38%;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 padded">
+                                    <pre>
+<code class="language-javascript line-numbers">function fizzBuzz(number1, number2) {
+    var output = [];    
+    for (i = 1; i <= 100; i++)
+        output[i] = (i % number1 ? "" : "Fizz")
+            + (i % number2 ? "" : "Buzz") || i;
+    return output;
+}
+function submitNumbersToFizzBuzz() {
+    var numbers = getInput().map(function (n) {
+        return Number(n) ? Number(n) : Infinity;
+    });
+    setOutput(fizzBuzz(numbers[0], numbers[1]));
+}</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade row" id="palindrome" data-action="submitStringToPalindrome">
+                                <div class="col-lg-4 padded">
+                                    <div style="margin: 15px;">
+                                        Enter any word or phrase into the box below.
+                                        <br />
+                                        This Javascript program will then test your phrase to see if it is a palindrome.
+                                        (This program is sensitive to all whitespace and punctuation, but not to capitalization.)
+                                    </div>
+                                    <div class="well">
+                                        <textarea rows="5" class="jsInput" style="resize:none; width:100%;"></textarea>
+                                        <textarea readonly class="auto-grow collapse jsOutput" style="resize:none; width:100%; margin-top:10px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 padded">
+                                    <pre>
+<code class="language-javascript line-numbers">function palindrome(str) {
+    for (i = 0; i < str.length / 2;)
+        if (str[i].toLowerCase() != str[str.length-++i].toLowerCase())
+            return false;
+    return true;
+}
+function submitStringToPalindrome() {
+    var str = getInput().split("");
+    var strLength = str.length;
+    if (!strLength)
+        setOutput({ Error: "Nothing was entered." })
+    else if (palindrome(str))
+        setOutput({
+            "That is a Palindrome" :
+                "\n" + str.splice(0, strLength / 2).join("") +
+                " <" + (!(strLength % 2) ? "-" : str.shift()) + "> "
+                + str.join("")
+        });
+    else
+        setOutput({
+            "That is not a Palindrome" : "\n" + str.reverse().join("")
+        });
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-xs-6">
+                            <div class="btn-group btn-group-justified">
+                                <a href="#" class="btn btn-default" onclick="submitInput(); return false;" id="submitBtn" disabled="disabled">Submit</a>
+                                <a href="#" class="btn btn-default" onclick="resetInput(); return false;" id="resetBtn" disabled="disabled">Reset</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2 col-sm-offset-5 icon">
+                        <a href="http://www.github.com/corbinsteele" target="_blank"><i class="fa fa-github"></i></a>
+                    </div>
+                    <div class="col-sm-5" style="text-align:center;">
+                        <div class="well">
+                            steele.cts@gmail.com
+                            <br />
+                            (202) 674-6759
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
