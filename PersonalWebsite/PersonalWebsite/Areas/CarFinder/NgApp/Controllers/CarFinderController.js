@@ -87,7 +87,7 @@
     var initializeCar = function (car) {
         //car.ImageUrls = ['//:0'];
         var options = { params: { year: car.Model_Year, make: car.Make_Display, model: car.Model_Name, trim: car.Model_Trim } };
-        car.ImageUrls = ['/Areas/CarFinder/img/loading.gif'];
+        car.ImageUrls = ['~/Areas/CarFinder/images/loading.gif'];
         $http.get('api/images', options).then(function (response) {
             car.ImageUrls = response.data;
         });

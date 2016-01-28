@@ -19,7 +19,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // GET: Blog/Posts
         public async Task<ActionResult> Index()
         {
-            return View(await db.Posts.ToListAsync());
+            return View((await this.GetDb().Posts.ToListAsync()));
         }
 
         // GET: Blog/Posts/Details/5
@@ -29,7 +29,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await db.Posts.FindAsync(id);
+            Post post = await this.GetDb().Posts.FindAsync(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -38,6 +38,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         }
 
         // GET: Blog/Posts/Create
+        //[Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -48,31 +49,53 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PostID,AuthorID,Title,CreatedOn")] Post post)
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Create([Bind(Include = "Title,Extract,Content,DoPublish")] PostView postView)
         {
             if (ModelState.IsValid)
             {
-                db.Posts.Add(post);
-                await db.SaveChangesAsync();
+                Post post = new Post();
+                post.AuthorID = (await this.GetUserManager().FindByNameAsync(User.Identity.Name)).Id;
+                post.Title = postView.Title;
+                if (postView.DoPublish)
+                    post.CreatedOn = new DateTimeOffset(DateTime.Now);
+                this.GetDb().Posts.Add(post);
+                await this.GetDb().SaveChangesAsync();
+                post = await this.GetDb().Posts.FirstAsync(p => p.Title == post.Title);
+
+                PostContent postContent = new PostContent();
+                postContent.PostID = post.PostID;
+                postContent.Extract = postView.Extract;
+                postContent.Content = postView.Content;
+                this.GetDb().PostContents.Add(postContent);
+                await this.GetDb().SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            return View(post);
+            return View(postView);
         }
 
         // GET: Blog/Posts/Edit/5
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await db.Posts.FindAsync(id);
+            Post post = await this.GetDb().Posts.FirstOrDefaultAsync(p => p.PostID == id);
             if (post == null)
             {
                 return HttpNotFound();
             }
-            return View(post);
+            EditedPostView postView = new EditedPostView();
+            postView.Title = post.Title;
+            postView.DoPublish = post.CreatedOn != null;
+            PostContent postContent = post.PostContents.OrderByDescending(pc => pc.PostContentID).First();
+            postView.Extract = postContent.Extract;
+            postView.Content = postContent.Content;
+            postView.IsDeleted = postContent.IsDeleted;
+            postView.UpdateReason = postContent.UpdateReason;
+            return View(postView);
         }
 
         // POST: Blog/Posts/Edit/5
@@ -80,25 +103,64 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PostID,AuthorID,Title,CreatedOn")] Post post)
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Edit([Bind(Include = "Title,Extract,Content,DoPublish,UpdatedReason,IsDeleted")] EditedPostView postView)
         {
-            if (ModelState.IsValid)
+            Post post = await this.GetDb().Posts.FirstAsync(p => p.Title == postView.Title);
+            if (ModelState.IsValid && (postView.DoPublish || post.CreatedOn == null))
             {
-                db.Entry(post).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                PostContent postContent = await this.GetDb().PostContents.FirstAsync(pc => pc.PostID == post.PostID);
+                if (!postView.DoPublish) // This is a draft that needs to not be published
+                {
+                    postContent.Extract = postView.Extract;
+                    postContent.Content = postView.Content;
+                    this.GetDb().Entry(postContent).State = EntityState.Modified;
+                }
+                else if (post.CreatedOn == null) // This is an edited draft
+                {
+                    if (postView.IsDeleted) // The draft needs to be deleted
+                    {
+                        this.GetDb().PostContents.Remove(postContent);
+                        this.GetDb().Posts.Remove(post);
+                    }
+                    else // The draft needs to be published
+                    {
+                        post.CreatedOn = new DateTimeOffset(DateTime.Now);
+                        this.GetDb().Entry(post).State = EntityState.Modified;
+                        postContent.Extract = postView.Extract;
+                        postContent.Content = postView.Content;
+                        this.GetDb().Entry(postContent).State = EntityState.Modified;
+                    }
+                }
+                else // This is a pre-existing post
+                {
+                    postContent = new PostContent();
+                    postContent.PostID = post.PostID;
+                    postContent.EditorID = (await this.GetUserManager().FindByNameAsync(User.Identity.Name)).Id;
+                    postContent.UpdatedOn = new DateTimeOffset(DateTime.Now);
+                    postContent.UpdateReason = postView.UpdateReason;
+                    postContent.Extract = postView.Extract;
+                    postContent.Content = postView.Content;
+                    postContent.IsDeleted = postView.IsDeleted;
+                    this.GetDb().PostContents.Add(postContent);
+                }
+                await this.GetDb().SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(post);
+            if (postView.DoPublish && post.CreatedOn == null)
+                postView.DoPublish = false;
+            return View(postView);
         }
 
         // GET: Blog/Posts/Delete/5
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await db.Posts.FindAsync(id);
+            Post post = await this.GetDb().Posts.FindAsync(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -109,11 +171,12 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // POST: Blog/Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Post post = await db.Posts.FindAsync(id);
-            db.Posts.Remove(post);
-            await db.SaveChangesAsync();
+            Post post = await this.GetDb().Posts.FindAsync(id);
+            this.GetDb().Posts.Remove(post);
+            await this.GetDb().SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

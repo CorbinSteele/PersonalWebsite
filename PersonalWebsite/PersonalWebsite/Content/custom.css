@@ -11,9 +11,9 @@
     font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
     padding-top: 30px;
 }
-.with-background
+body.Home
 {
-    background: url('/assets/img/moon.jpg');
+    background: url('/images/moon.jpg');
     background-size: 150%;
     background-position: center right;
     background-repeat: no-repeat;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace PersonalWebsite.Areas.ContactMe.Controllers
+namespace PersonalWebsite.Areas.Contact.Controllers
 {
     public class HomeController : Controller
     {

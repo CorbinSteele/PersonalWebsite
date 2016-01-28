@@ -177,6 +177,7 @@
     <Compile Include="Areas\About\Controllers\HomeController.cs" />
     <Compile Include="Areas\Blog\BlogAreaRegistration.cs" />
     <Compile Include="Areas\Blog\Controllers\PostsController.cs" />
+    <Compile Include="Areas\Blog\Models\BlogViewModels.cs" />
     <Compile Include="Areas\Blog\Models\BlogModels.cs" />
     <Compile Include="Areas\CarFinder\Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\CarFinder\Areas\HelpPage\App_Start\HelpPageConfig.cs" />
@@ -212,8 +213,9 @@
     <Compile Include="Areas\CarFinder\Models\BingSearchContainer.cs" />
     <Compile Include="Areas\CarFinder\Models\Car.cs" />
     <Compile Include="Areas\CarFinder\Models\RecallsAPI.cs" />
-    <Compile Include="Areas\ContactMe\ContactMeAreaRegistration.cs" />
-    <Compile Include="Areas\ContactMe\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Contact\ContactAreaRegistration.cs" />
+    <Compile Include="Areas\Contact\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Portfolio\Models\Project.cs" />
     <Compile Include="Areas\Portfolio\PortfolioAreaRegistration.cs" />
     <Compile Include="Areas\Portfolio\Controllers\HomeController.cs" />
     <Compile Include="Areas\Resume\ResumeAreaRegistration.cs" />
@@ -236,7 +238,7 @@
     <Content Include="Areas\CarFinder\Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\CarFinder\Content\car-finder-app.css" />
     <Content Include="Areas\CarFinder\Content\trNgGrid.min.css" />
-    <Content Include="Areas\CarFinder\img\loading.gif" />
+    <Content Include="Areas\CarFinder\images\loading.gif" />
     <Content Include="Areas\CarFinder\NgApp\app.js" />
     <Content Include="Areas\CarFinder\NgApp\Controllers\CarFinderController.js" />
     <Content Include="Areas\CarFinder\Scripts\angular-animate.js" />
@@ -253,9 +255,11 @@
     <Content Include="Areas\About\Views\web.config" />
     <Content Include="Areas\About\Views\_ViewStart.cshtml" />
     <Content Include="Areas\About\Views\Home\Index.cshtml" />
-    <Content Include="Areas\Portfolio\App_Data\Projects.xml" />
+    <Content Include="Areas\Portfolio\App_Data\Projects.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\Portfolio\Content\javascript-exercises.css" />
-    <Content Include="Content\prism.css" />
+    <Content Include="Areas\Portfolio\Content\prism.css" />
     <Content Include="Areas\Portfolio\Scripts\custom.js" />
     <Content Include="Areas\Portfolio\Scripts\javascriptExercises.js" />
     <Content Include="Areas\Portfolio\Scripts\prism.js" />
@@ -263,10 +267,11 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\font-awesome.min.css" />
-    <Content Include="img\headshot.jpg" />
-    <Content Include="img\javascript-expanded.png" />
-    <Content Include="img\moon.jpg" />
-    <Content Include="img\starfield.jpg" />
+    <Content Include="Areas\About\images\headshot.jpg" />
+    <Content Include="Areas\Portfolio\images\javascript.png" />
+    <Content Include="images\360-temp.png" />
+    <Content Include="images\moon.jpg" />
+    <Content Include="Areas\About\images\starfield.jpg" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -300,6 +305,8 @@
     <Content Include="Areas\CarFinder\Views\Web.config" />
     <Content Include="Areas\CarFinder\Views\_ViewStart.cshtml" />
     <Content Include="Areas\CarFinder\Web.config" />
+    <Content Include="Areas\Blog\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Blog\Views\Shared\_Layout.cshtml" />
     <None Include="Areas\CarFinder\Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -310,9 +317,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="Areas\ContactMe\Views\Home\Index.cshtml" />
-    <Content Include="Areas\ContactMe\Views\web.config" />
-    <Content Include="Areas\ContactMe\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Contact\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Contact\Views\web.config" />
+    <Content Include="Areas\Contact\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Portfolio\Views\Home\Index.cshtml" />
     <Content Include="Areas\Portfolio\Views\web.config" />
     <Content Include="Areas\Portfolio\Views\_ViewStart.cshtml" />
@@ -321,6 +328,8 @@
     <Content Include="Areas\Resume\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Portfolio\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Portfolio\Views\Shared\_ProjectLayout.cshtml" />
+    <Content Include="Areas\Portfolio\Views\Home\_JsPartial.cshtml" />
+    <Content Include="Areas\Portfolio\Views\Home\_CfPartial.cshtml" />
     <None Include="Properties\PublishProfiles\csteele-temp - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\csteele-temp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\csteele-temp.pubxml" />
@@ -350,8 +359,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -376,7 +383,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Blog\Views\Shared\" />
     <Folder Include="Areas\CarFinder\NgApp\Filters\" />
     <Folder Include="Areas\CarFinder\NgApp\Services\" />
   </ItemGroup>

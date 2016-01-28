@@ -1,8 +1,6 @@
 ﻿.modal-content { min-height: 600px; }
 .modal-body { margin-bottom: 78px; padding-bottom: 0px; }
-.modal-footer { position: absolute; bottom: 0px; }
-p { line-height: 1.35; }
+.modal-footer { position: absolute; bottom: 0px; width: 100%; }
 pre.line-numbers { padding-left: 3em; padding-right: 0px; }
-code.language-javascript { line-height: 1.35; }
 #jsExercisesTabContent > .tab-pane { margin-top: 10px;}
 #resetBtn { border-left: thin solid #222222; }

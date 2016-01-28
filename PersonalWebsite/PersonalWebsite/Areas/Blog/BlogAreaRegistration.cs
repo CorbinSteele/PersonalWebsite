@@ -17,7 +17,14 @@ namespace PersonalWebsite.Areas.Blog
             context.MapRoute(
                 "Blog_default",
                 "Blog/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { controller = "Posts", action = "Index", id = UrlParameter.Optional },
+                new [] { "PersonalWebsite.Areas.Blog.Controllers" }
+            );
+            context.MapRoute(
+                "Blog_Post",
+                "Blog/Post/{id}/{controller}/{action}",
+                new { controller = "Posts", action = "Details", id = UrlParameter.Optional },
+                new[] { "PersonalWebsite.Areas.Blog.Controllers" }
             );
         }
     }

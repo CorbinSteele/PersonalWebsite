@@ -1,8 +1,11 @@
 ﻿using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using PersonalWebsite.Areas.Blog.Models;
 
 namespace PersonalWebsite.Models
@@ -38,5 +41,17 @@ namespace PersonalWebsite.Models
         public DbSet<PostContent> PostContents { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommentContent> CommentContents { get; set; }
+    }
+
+    public static class ControllerExtensions
+    {
+        public static ApplicationDbContext GetDb(this Controller controller)
+        {
+            return controller.HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+        }
+        public static ApplicationUserManager GetUserManager(this Controller controller)
+        {
+            return controller.HttpContext.GetOwinContext().Get<ApplicationUserManager>();
+        }
     }
 }

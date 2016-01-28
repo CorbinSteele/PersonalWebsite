@@ -1,24 +1,24 @@
 ﻿using System.Web.Mvc;
 
-namespace PersonalWebsite.Areas.ContactMe
+namespace PersonalWebsite.Areas.Contact
 {
-    public class ContactMeAreaRegistration : AreaRegistration 
+    public class ContactAreaRegistration : AreaRegistration 
     {
         public override string AreaName 
         {
             get 
             {
-                return "ContactMe";
+                return "Contact";
             }
         }
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "ContactMe_default",
-                "ContactMe/{controller}/{action}/{id}",
+                "Contact_default",
+                "Contact/{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-                new[] { "PersonalWebsite.Areas.ContactMe.Controllers" }
+                new[] { "PersonalWebsite.Areas.Contact.Controllers" }
             );
         }
     }

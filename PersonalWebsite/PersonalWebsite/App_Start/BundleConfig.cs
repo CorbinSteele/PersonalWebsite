@@ -11,7 +11,6 @@ namespace PersonalWebsite
             bundles.Add(new StyleBundle("~/bundles/css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/prism.css",
                       "~/Content/custom.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
@@ -19,6 +18,7 @@ namespace PersonalWebsite
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/bundles/Portfolio/css").Include(
+                      "~/Areas/Portfolio/Content/prism.css",
                       "~/Areas/Portfolio/Content/javascript-exercises.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/Portfolio/js").Include(

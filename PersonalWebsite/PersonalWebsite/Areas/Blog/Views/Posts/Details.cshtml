@@ -1,8 +1,7 @@
-﻿@model Blog.Models.Post
+﻿@model PersonalWebsite.Areas.Blog.Models.Post
 
 @{
-    ViewBag.Title = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = @Model.Title;
 }
 
 <h2>Details</h2>
