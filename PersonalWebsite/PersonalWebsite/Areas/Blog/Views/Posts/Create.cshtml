@@ -39,7 +39,10 @@
         </div>
 
         <div class="form-group">
-            @Html.CheckBoxFor(model => model.DoPublish, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.LabelFor(model => model.DoPublish, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.DoPublish, htmlAttributes: new { @class = "form-control form-checkbox" })
+            </div>
         </div>
 
         <div class="form-group">

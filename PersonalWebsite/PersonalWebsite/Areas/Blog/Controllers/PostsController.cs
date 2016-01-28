@@ -38,7 +38,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         }
 
         // GET: Blog/Posts/Create
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -49,13 +49,13 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Create([Bind(Include = "Title,Extract,Content,DoPublish")] PostView postView)
         {
             if (ModelState.IsValid)
             {
                 Post post = new Post();
-                post.AuthorID = (await this.GetUserManager().FindByNameAsync(User.Identity.Name)).Id;
+                post.AuthorID = (await this.GetAppUserAsync()).Id;
                 post.Title = postView.Title;
                 if (postView.DoPublish)
                     post.CreatedOn = new DateTimeOffset(DateTime.Now);
@@ -75,26 +75,22 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         }
 
         // GET: Blog/Posts/Edit/5
-        //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit(int? id)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Edit(string id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Post post = await this.GetDb().Posts.FirstOrDefaultAsync(p => p.PostID == id);
+            Post post = await this.GetDb().Posts.FirstOrDefaultAsync(p => p.Title == id);
             if (post == null)
             {
                 return HttpNotFound();
             }
             EditedPostView postView = new EditedPostView();
-            postView.Title = post.Title;
             postView.DoPublish = post.CreatedOn != null;
-            PostContent postContent = post.PostContents.OrderByDescending(pc => pc.PostContentID).First();
+            PostContent postContent = post.Content;
             postView.Extract = postContent.Extract;
             postView.Content = postContent.Content;
             postView.IsDeleted = postContent.IsDeleted;
             postView.UpdateReason = postContent.UpdateReason;
+            this.AddTemp(postView, "PostID", post.PostID);
             return View(postView);
         }
 
@@ -103,10 +99,18 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "Title,Extract,Content,DoPublish,UpdatedReason,IsDeleted")] EditedPostView postView)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Extract,Content,DoPublish,UpdatedReason,IsDeleted")] EditedPostView postView)
         {
-            Post post = await this.GetDb().Posts.FirstAsync(p => p.Title == postView.Title);
+            Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));//.FirstAsync(p => p.Title == postView.Title);
+            if (post == null)
+            {
+                this.ClearTemp(postView);
+                return RedirectToAction("Index");
+            }
+            ModelState value;
+            if (ModelState.TryGetValue("Title", out value))
+                value.Errors.Clear();
             if (ModelState.IsValid && (postView.DoPublish || post.CreatedOn == null))
             {
                 PostContent postContent = await this.GetDb().PostContents.FirstAsync(pc => pc.PostID == post.PostID);
@@ -144,6 +148,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                     postContent.IsDeleted = postView.IsDeleted;
                     this.GetDb().PostContents.Add(postContent);
                 }
+                this.ClearTemp(postView);
                 await this.GetDb().SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -151,9 +156,9 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 postView.DoPublish = false;
             return View(postView);
         }
-
+        /*
         // GET: Blog/Posts/Delete/5
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -171,7 +176,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // POST: Blog/Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Post post = await this.GetDb().Posts.FindAsync(id);
@@ -179,7 +184,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             await this.GetDb().SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
+        */
         protected override void Dispose(bool disposing)
         {
             if (disposing)

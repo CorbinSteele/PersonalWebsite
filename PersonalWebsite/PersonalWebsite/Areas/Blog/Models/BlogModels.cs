@@ -22,6 +22,10 @@ namespace PersonalWebsite.Areas.Blog.Models
         public virtual ApplicationUser Author { get; set; }
         public virtual ICollection<PostContent> PostContents { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public PostContent Content {
+            get { return this.PostContents.OrderByDescending(pc => pc.PostContentID).First(); }
+        }
     }
     public class PostContent
     {

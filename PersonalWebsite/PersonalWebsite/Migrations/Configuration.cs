@@ -25,7 +25,9 @@ namespace PersonalWebsite.Migrations
                 roleManager.Create(new IdentityRole { Name = "Moderator" });
 
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-            ApplicationUser user = userManager.FindByName("Corbin Steele");
+            ApplicationUser user = userManager.FindByName("steele.cts@gmail.com");
+            if (user != null && !userManager.IsInRole(user.Id, "Admin"))
+                userManager.AddToRole(user.Id, "Admin");
             /*if (user == null)
             {
                 var newUser = userManager.Create(new ApplicationUser() { UserName = "Corbin Steele" }, "password");

@@ -11,6 +11,16 @@
     font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
     padding-top: 30px;
 }
+input[type="checkbox"].form-checkbox
+{
+    width: 38px;
+    margin: 0px;
+    -webkit-appearance: none;
+}
+input[type="checkbox"].form-checkbox:checked
+{
+    -webkit-appearance: checkbox;
+}
 body.Home
 {
     background: url('/images/moon.jpg');

@@ -9,6 +9,41 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@foreach (var post in Model.Where(p => !p.Content.IsDeleted))
+{
+    <div class="sub-container-outer">
+        <div class="row">
+            <h3>
+                @post.Title by @post.Author.FirstName @post.Author.LastName on
+                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(post.CreatedOn.Value.Month)
+                @post.CreatedOn.Value.Day, @post.CreatedOn.Value.Year
+            </h3>
+            <div class="col-sm-5">
+                <div class="col-sm-12 col-sm-offset-1 col-md-11">
+                    <img src="~/images/360-temp.png" class="img-responsive img-rounded center-block" alt="image" width="360" />
+                </div>
+                &nbsp;
+            </div>
+            <div class="col-sm-7">
+                <div class="sub-container-inner" style="margin-top:0;">
+                    <p>
+                        @post.Content.Extract
+                        <!--
+                        Multiple small Javascript exercises, all with source code and simple interfaces.
+                        The exercises include multiple examples of complex logic expressions,
+                        looping constructs, string and number manipulation,
+                        creative use of anonymous objects and functions,
+                        extensive use of the JQuery and Javascript libraries,
+                        and even one particularly interesting use of Infinity.
+                        There are only four exercises, so it won't cost too much time to check them all out!
+                        -->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <table class="table">
     <tr>
         <th>
@@ -20,7 +55,21 @@
         <th>
             @Html.DisplayNameFor(model => model.CreatedOn)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content.Extract)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content.EditorID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content.UpdatedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content.UpdateReason)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Content.IsDeleted)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -35,7 +84,22 @@
             @Html.DisplayFor(modelItem => item.CreatedOn)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PostID }) |
+            @Html.DisplayFor(modelItem => item.Content.Extract)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content.EditorID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content.UpdatedOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content.UpdateReason)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content.IsDeleted)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Title }) |
             @Html.ActionLink("Details", "Details", new { id=item.PostID }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.PostID })
         </td>

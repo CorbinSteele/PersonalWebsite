@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title += ": Edit Post";
-    Model.Title = Model.Title;
 }
 
 <h2>Edit</h2>
@@ -10,11 +9,15 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Post</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @foreach (var token in Model.TempTokens.Keys)
+        {
+            <input id="TempTokens[@token]" name="TempTokens[@token]" type="hidden" value="@Model.TempTokens[token]">
+        }
 
         <div class="form-group">
             @Html.LabelFor(model => model.Extract, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -34,11 +37,15 @@
         @if (!Model.DoPublish)
         {
             <div class="form-group">
-                @Html.CheckBoxFor(model => model.DoPublish, htmlAttributes: new { @class = "form-control" })
+                @Html.LabelFor(model => model.DoPublish, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.CheckBoxFor(model => model.DoPublish, htmlAttributes: new { @class = "form-control form-checkbox" })
+                </div>
             </div>
         }
         else
         {
+            @Html.HiddenFor(model => model.DoPublish)
             <div class="form-group">
                 @Html.LabelFor(model => model.UpdateReason, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
@@ -47,7 +54,10 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.CheckBoxFor(model => model.IsDeleted, htmlAttributes: new { @class = "form-control" })
+                @Html.LabelFor(model => model.IsDeleted, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.CheckBoxFor(model => model.IsDeleted, htmlAttributes: new { @class = "form-control form-checkbox" })
+                </div>
             </div>
         }
 
