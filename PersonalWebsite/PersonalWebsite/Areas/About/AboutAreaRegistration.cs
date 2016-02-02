@@ -16,8 +16,8 @@ namespace PersonalWebsite.Areas.About
         {
             context.MapRoute(
                 "About_default",
-                "About/{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                "About",
+                new { controller = "Home", action = "Index" },
                 new[] { "PersonalWebsite.Areas.About.Controllers" }
             );
         }

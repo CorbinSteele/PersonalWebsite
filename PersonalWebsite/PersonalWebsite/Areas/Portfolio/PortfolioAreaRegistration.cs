@@ -16,8 +16,8 @@ namespace PersonalWebsite.Areas.Portfolio
         {
             context.MapRoute(
                 "Portfolio_default",
-                "Portfolio/{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                "Portfolio",
+                new { controller = "Home", action = "Index" },
                 new[] { "PersonalWebsite.Areas.Portfolio.Controllers" }
             );
         }

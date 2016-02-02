@@ -1,39 +1,20 @@
 ﻿@model PersonalWebsite.Areas.Blog.Models.EditedPostView
 
 @{
-    ViewBag.Title += ": Edit Post";
+    ViewBag.Title += ": Edit \"" + Model.Title + "\"";
 }
-
-<h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Post</h4>
+        <h3>@Model.Title</h3>
+        @Html.HiddenFor(model => model.Title)
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @foreach (var token in Model.TempTokens.Keys)
-        {
-            <input id="TempTokens[@token]" name="TempTokens[@token]" type="hidden" value="@Model.TempTokens[token]">
-        }
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Extract, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Extract, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Extract, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.Partial("_TempTokensPartial", Model.TempTokens)
+        @Html.Partial("PostModify", Model)
         @if (!Model.DoPublish)
         {
             <div class="form-group">
@@ -64,11 +45,14 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
+                <input type="button" onclick="window.history.back();" value="Cancel" class="btn btn-default" />
+                <!--<button class="btn btn-default" style="position: relative;">
+                    <a href="@Url.RouteUrl("Blog_Post", new { id = Url.RequestContext.RouteData.Values["id"] })">
+                        <span class="sub-container-link"></span>
+                    </a>
+                    Cancel
+                </button>-->
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

@@ -16,8 +16,8 @@ namespace PersonalWebsite.Areas.Contact
         {
             context.MapRoute(
                 "Contact_default",
-                "Contact/{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                "Contact",
+                new { controller = "Home", action = "Index" },
                 new[] { "PersonalWebsite.Areas.Contact.Controllers" }
             );
         }

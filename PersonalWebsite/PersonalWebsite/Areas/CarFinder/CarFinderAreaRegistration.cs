@@ -17,8 +17,8 @@ namespace PersonalWebsite.Areas.CarFinder
         {
             context.MapRoute(
                 "CarFinder_Default",
-                url: "CarFinder/{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                url: "CarFinder",
+                defaults: new { controller = "Home", action = "Index" },
                 namespaces: new[] { "PersonalWebsite.Areas.CarFinder.Controllers" }
             );
         }

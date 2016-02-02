@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNet.Identity
+@using PersonalWebsite.Models;
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", new { area = "", returnUrl = HttpContext.Current.Request.RawUrl }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" id="userDropDown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Log In <strong class="caret"></strong></a>
+            <div class="dropdown-menu" id="userMenu" style="padding: 15px; padding-bottom: 0px;  width: 350px;">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#login" data-toggle="tab" aria-expanded="true">Log In</a></li>
+                    <li class=""><a href="#externalLogin" data-toggle="tab" aria-expanded="false">External Log In</a></li>
+                    <li class=""><a href="#register" data-toggle="tab" aria-expanded="false">Register</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="login">
+                        @Html.Partial("_LoginPartial", new LoginViewModel())
+                    </div>
+                    <div class="tab-pane fade" id="externalLogin">
+                        @Html.Partial("_ExternalLoginPartial")
+                    </div>
+                    <div class="tab-pane fade" id="register">
+                        @Html.Partial("_RegisterPartial", new RegisterViewModel())
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <script>
+        $('#userMenu').click(function (e) {
+            e.stopPropagation();
+        });
+        $("#userMenu a").click(function (e) {
+            $(e.target).tab('show');
+        })
+        function RefreshPage(data) {
+            if (data === "Success")
+                window.location.href = "@HttpContext.Current.Request.RawUrl";
+        }
+    </script>
+    <!--<ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>-->
+}

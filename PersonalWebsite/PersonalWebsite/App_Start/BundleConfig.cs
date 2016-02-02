@@ -15,6 +15,9 @@ namespace PersonalWebsite
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                       "~/Scripts/jquery-1.10.2.js",
+                      "~/Scripts/jquery.validate.js",
+                      "~/Scripts/jquery.validate.unobtrusive.js",
+                      "~/Scripts/jquery.unobtrusive-ajax.js",
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/bundles/Portfolio/css").Include(

@@ -1,0 +1,20 @@
+﻿@model PersonalWebsite.Areas.Blog.Models.PostView
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Extract, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Extract, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Extract, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        <textarea class="form-control" id="Content" name="Content" type="text">@((Model == null) ? "" : Model.Content)</textarea>
+        <!--@Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })-->
+        @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+    </div>
+</div>
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>tinymce.init({ selector: '#Content' });</script>

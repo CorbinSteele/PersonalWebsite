@@ -1,10 +1,4 @@
-﻿.title-text > h2
-{
-    font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
-    color: #2a9fd6;
-    margin-bottom: 10px;
-}
-.results-table {
+﻿.results-table {
     padding: 0px 20px;
 }
 .tr-ng-grid .tr-ng-sort .tr-ng-sort-inactive {

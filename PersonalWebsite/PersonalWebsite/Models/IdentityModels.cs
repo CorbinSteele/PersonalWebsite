@@ -42,43 +42,4 @@ namespace PersonalWebsite.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommentContent> CommentContents { get; set; }
     }
-
-    public static class ControllerExtensions
-    {
-        public static ApplicationDbContext GetDb(this Controller controller)
-        {
-            return controller.HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-        }
-        public static ApplicationUserManager GetUserManager(this Controller controller)
-        {
-            return controller.HttpContext.GetOwinContext().Get<ApplicationUserManager>();
-        }
-        public async static Task<ApplicationUser> GetAppUserAsync(this Controller controller)
-        {
-            return await controller.GetUserManager().FindByNameAsync(controller.User.Identity.Name);
-        }
-        public static void AddTemp<T>(this Controller controller, ITempable tempable, string key, T value)
-        {
-            string token = System.Guid.NewGuid().ToString();
-            tempable.TempTokens.Add(key, token);
-            controller.TempData.Add(token, value);
-        }
-        public static T GetTemp<T>(this Controller controller, ITempable tempable, string key)
-        {
-            string token;
-            object value;
-            if (!tempable.TempTokens.TryGetValue(key, out token) || !controller.TempData.TryGetValue(token, out value))
-                return default(T);
-            if (value is T)
-                return (T)value;
-            else
-                try { return (T)System.Convert.ChangeType(value, typeof(T)); }
-                catch (System.InvalidCastException) { return default(T); }
-        }
-        public static void ClearTemp(this Controller controller, ITempable tempable)
-        {
-            controller.TempData.Clear();
-            tempable.TempTokens.Clear();
-        }
-    }
 }

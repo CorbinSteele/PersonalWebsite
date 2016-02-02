@@ -1,0 +1,6 @@
+﻿@model System.Collections.Generic.Dictionary<string, string>
+
+@foreach (var token in Model.Keys)
+{
+    <input id="TempTokens[@token]" name="TempTokens[@token]" type="hidden" value="@Model[token]">
+}

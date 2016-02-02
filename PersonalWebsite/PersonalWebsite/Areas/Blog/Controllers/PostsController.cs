@@ -76,20 +76,18 @@ namespace PersonalWebsite.Areas.Blog.Controllers
 
         // GET: Blog/Posts/Edit/5
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            Post post = await this.GetDb().Posts.FirstOrDefaultAsync(p => p.Title == id);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Post post = await this.GetDb().Posts.FindAsync(id);
             if (post == null)
             {
                 return HttpNotFound();
             }
-            EditedPostView postView = new EditedPostView();
-            postView.DoPublish = post.CreatedOn != null;
-            PostContent postContent = post.Content;
-            postView.Extract = postContent.Extract;
-            postView.Content = postContent.Content;
-            postView.IsDeleted = postContent.IsDeleted;
-            postView.UpdateReason = postContent.UpdateReason;
+            EditedPostView postView = new EditedPostView(post);
             this.AddTemp(postView, "PostID", post.PostID);
             return View(postView);
         }
@@ -100,7 +98,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Extract,Content,DoPublish,UpdatedReason,IsDeleted")] EditedPostView postView)
+        public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Title,Extract,Content,DoPublish,UpdateReason,IsDeleted")] EditedPostView postView)
         {
             Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));//.FirstAsync(p => p.Title == postView.Title);
             if (post == null)
@@ -108,9 +106,9 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 this.ClearTemp(postView);
                 return RedirectToAction("Index");
             }
-            ModelState value;
+            /*ModelState value;
             if (ModelState.TryGetValue("Title", out value))
-                value.Errors.Clear();
+                value.Errors.Clear();*/
             if (ModelState.IsValid && (postView.DoPublish || post.CreatedOn == null))
             {
                 PostContent postContent = await this.GetDb().PostContents.FirstAsync(pc => pc.PostID == post.PostID);
@@ -154,9 +152,9 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             }
             if (postView.DoPublish && post.CreatedOn == null)
                 postView.DoPublish = false;
+            postView.Title = post.Title;
             return View(postView);
         }
-        /*
         // GET: Blog/Posts/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int? id)
@@ -170,21 +168,41 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             {
                 return HttpNotFound();
             }
-            return View(post);
+            var deleteView = new EditedPostView(post);
+            this.AddTemp(deleteView, "PostID", post.PostID);
+            return View(deleteView);
         }
 
         // POST: Blog/Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed([Bind(Include = "TempTokens,UpdateReason")] EditedPostView postView)
         {
-            Post post = await this.GetDb().Posts.FindAsync(id);
-            this.GetDb().Posts.Remove(post);
+            Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));
+            if (post.Content.IsDeleted) // It was previously deleted
+                return RedirectToAction("Index");
+            if (post.CreatedOn == null) // It's a draft
+            {
+                this.GetDb().PostContents.Remove(post.Content);
+                this.GetDb().Posts.Remove(post);
+            }
+            else // It's a previously published post
+            {
+                PostContent postContent = new PostContent();
+                postContent.PostID = post.PostID;
+                postContent.EditorID = (await this.GetUserManager().FindByNameAsync(User.Identity.Name)).Id;
+                postContent.UpdatedOn = new DateTimeOffset(DateTime.Now);
+                postContent.UpdateReason = postView.UpdateReason;
+                postContent.Extract = post.Content.Extract;
+                postContent.Content = post.Content.Content;
+                postContent.IsDeleted = true;
+                this.GetDb().PostContents.Add(postContent);
+            }
             await this.GetDb().SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        */
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

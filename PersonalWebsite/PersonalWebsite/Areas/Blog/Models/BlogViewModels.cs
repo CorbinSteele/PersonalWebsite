@@ -22,9 +22,15 @@ namespace PersonalWebsite.Areas.Blog.Models
         [StringLength(100, ErrorMessage = "The {0} must be no more than {1} characters long.")]
         [Display(Name = "Extract")]
         public string Extract { get; set; }
+        private string content;
         [Required]
         [Display(Name = "Body")]
-        public string Content { get; set; }
+        [System.Web.Mvc.AllowHtml]
+        public string Content
+        {
+            get { return content; }
+            set { content = Microsoft.Security.Application.Sanitizer.GetSafeHtmlFragment(value).Trim(); }
+        }
         [Display(Name = "Publish Post?")]
         public bool DoPublish { get; set; }
     }
@@ -34,9 +40,19 @@ namespace PersonalWebsite.Areas.Blog.Models
         {
             TempTokens = new Dictionary<string, string>();
         }
+        public EditedPostView(Post post) : this()
+        {
+            this.DoPublish = post.CreatedOn != null;
+            this.Title = post.Title;
+            PostContent postContent = post.Content;
+            this.Extract = postContent.Extract;
+            this.Content = postContent.Content;
+            this.IsDeleted = postContent.IsDeleted;
+            this.UpdateReason = postContent.UpdateReason;
+        }
         public Dictionary<string, string> TempTokens { get; set; }
         [StringLength(100, ErrorMessage = "The {0} must be no more than {1} characters long.")]
-        [Display(Name = "Edit Reason")]
+        [Display(Name = "Reason")]
         public string UpdateReason { get; set; }
         [Display(Name = "Delete Post?")]
         public bool IsDeleted { get; set; }

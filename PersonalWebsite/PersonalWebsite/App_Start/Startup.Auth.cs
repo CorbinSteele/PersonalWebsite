@@ -46,9 +46,9 @@ namespace PersonalWebsite
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            app.UseMicrosoftAccountAuthentication(
+                clientId: "000000004417AA13",
+                clientSecret: "lM10TxCRk9JYXcnEtrDrjxpGgGxG7hqt");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",

@@ -1,109 +1,149 @@
-﻿@model IEnumerable<PersonalWebsite.Areas.Blog.Models.Post>
+﻿@using PersonalWebsite.Models
+@model IEnumerable<PersonalWebsite.Areas.Blog.Models.Post>
 
 @{
     ViewBag.Title = " Posts";
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-@foreach (var post in Model.Where(p => !p.Content.IsDeleted))
+@if (User.IsInRole("Admin"))
 {
-    <div class="sub-container-outer">
-        <div class="row">
-            <h3>
-                @post.Title by @post.Author.FirstName @post.Author.LastName on
-                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(post.CreatedOn.Value.Month)
-                @post.CreatedOn.Value.Day, @post.CreatedOn.Value.Year
-            </h3>
-            <div class="col-sm-5">
-                <div class="col-sm-12 col-sm-offset-1 col-md-11">
-                    <img src="~/images/360-temp.png" class="img-responsive img-rounded center-block" alt="image" width="360" />
-                </div>
-                &nbsp;
-            </div>
-            <div class="col-sm-7">
-                <div class="sub-container-inner" style="margin-top:0;">
-                    <p>
-                        @post.Content.Extract
-                        <!--
-                        Multiple small Javascript exercises, all with source code and simple interfaces.
-                        The exercises include multiple examples of complex logic expressions,
-                        looping constructs, string and number manipulation,
-                        creative use of anonymous objects and functions,
-                        extensive use of the JQuery and Javascript libraries,
-                        and even one particularly interesting use of Infinity.
-                        There are only four exercises, so it won't cost too much time to check them all out!
-                        -->
-                    </p>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-xs-8 col-md-10"></div>
+            @Html.Partial("_ActionsPartial", new[] {
+                new ControllerAction("Posts", "Create", ControllerAction.Sizes.Large)
+            })
         </div>
     </div>
 }
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.AuthorID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content.Extract)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content.EditorID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content.UpdatedOn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content.UpdateReason)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Content.IsDeleted)
-        </th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.AuthorID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedOn)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Content.Extract)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Content.EditorID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Content.UpdatedOn)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Content.UpdateReason)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Content.IsDeleted)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Title }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PostID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PostID })
-        </td>
-    </tr>
+@foreach (var post in Model.Where(p => !p.Content.IsDeleted && p.CreatedOn != null))
+{
+    <div class="sub-container-outer">
+        <a name="@post.Title" href="@Url.RouteUrl("Blog_Post", new { id = post.PostID })"><span class="sub-container-link outlined"></span></a>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="@(post.Content.UpdatedOn == null ? "col-xs-8 col-sm-9 col-lg-10" : "col-xs-4 col-sm-6 col-lg-8")">
+                    <h3 style="text-align:left">@post.Title</h3>
+                </div>
+                <div class="col-xs-4 col-sm-3 col-lg-2">
+                    <h4 style="text-align:center">
+                        <b>Posted</b>
+                        <hr style="margin: 2px 0px 0px;" />
+                        <small>
+                            @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(post.CreatedOn.Value.Month)
+                            @post.CreatedOn.Value.Day, @post.CreatedOn.Value.Year
+                        </small>
+                    </h4>
+                </div>
+                @if (post.Content.UpdatedOn != null)
+                {
+                    <div class="col-xs-4 col-sm-3 col-lg-2">
+                        <h4 style="text-align:center">
+                            <b>Updated</b>
+                            <hr style="margin: 2px 0px 0px;" />
+                            <small>
+                                @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(post.Content.UpdatedOn.Value.Month)
+                                @post.Content.UpdatedOn.Value.Day, @post.Content.UpdatedOn.Value.Year
+                            </small>
+                        </h4>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="sub-container-inner">
+            <p>
+                @post.Content.Extract
+            </p>
+            <!--
+        <div class="sub-container-outer">
+            <div class="row">
+                <h3>
+                    @post.Title by @post.Author.FirstName @post.Author.LastName on
+                    @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(post.CreatedOn.Value.Month)
+                    @post.CreatedOn.Value.Day, @post.CreatedOn.Value.Year
+                </h3>
+                <div class="col-sm-5">
+                    <div class="col-sm-12 col-sm-offset-1 col-md-11">
+                        <img src="~/images/360-temp.png" class="img-responsive img-rounded center-block" alt="image" width="360" />
+                    </div>
+                    &nbsp;
+                </div>
+                <div class="col-sm-7">
+                    <div class="sub-container-inner" style="margin-top:0;">
+                        <p>
+                            @post.Content.Extract
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+        </div>
+    </div>
 }
+@if (User.Identity.Name == "steele.cts@gmail.com")
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AuthorID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content.Extract)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content.EditorID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content.UpdatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content.UpdateReason)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content.IsDeleted)
+            </th>
+        </tr>
 
-</table>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AuthorID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content.Extract)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content.EditorID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content.UpdatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content.UpdateReason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content.IsDeleted)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.PostID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.PostID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.PostID })
+            </td>
+        </tr>
+    }
+
+    </table>
+}

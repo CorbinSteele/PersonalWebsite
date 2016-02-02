@@ -16,8 +16,8 @@ namespace PersonalWebsite.Areas.Resume
         {
             context.MapRoute(
                 "Resume_default",
-                "Resume/{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                "Resume",
+                new { controller = "Home", action = "Index" },
                 new[] { "PersonalWebsite.Areas.Resume.Controllers" }
             );
         }

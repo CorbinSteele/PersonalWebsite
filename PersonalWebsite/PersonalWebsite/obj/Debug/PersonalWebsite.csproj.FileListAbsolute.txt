@@ -57,6 +57,10 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Micro
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.Google.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.Twitter.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.csprojResolveAssemblyReference.cache
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.pdb
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.xml
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.xml
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.csprojResolveAssemblyReference.cache
