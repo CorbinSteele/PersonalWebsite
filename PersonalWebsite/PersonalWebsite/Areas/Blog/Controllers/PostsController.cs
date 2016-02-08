@@ -55,7 +55,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             if (ModelState.IsValid)
             {
                 Post post = new Post();
-                post.AuthorID = (await this.GetAppUserAsync()).Id;
+                post.AuthorID = (this.GetAppUserAsync()).Id;
                 post.Title = postView.Title;
                 if (postView.DoPublish)
                     post.CreatedOn = new DateTimeOffset(DateTime.Now);

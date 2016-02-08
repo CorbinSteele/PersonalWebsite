@@ -3,9 +3,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.MicrosoftAccount;
 using Microsoft.Owin.Security.Google;
 using Owin;
+using Owin.Security.Providers.GitHub;
+using Owin.Security.Providers.LinkedIn;
 using PersonalWebsite.Models;
+using System.Security.Claims;
 
 namespace PersonalWebsite
 {
@@ -32,9 +36,9 @@ namespace PersonalWebsite
                     // This is a security feature which is used when you change a password or add an external login to your account.  
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
                         validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager, null))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
@@ -46,9 +50,19 @@ namespace PersonalWebsite
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
-            app.UseMicrosoftAccountAuthentication(
-                clientId: "000000004417AA13",
-                clientSecret: "lM10TxCRk9JYXcnEtrDrjxpGgGxG7hqt");
+            app.UseMicrosoftAccountAuthentication(app.GetCredentials<MicrosoftAccountAuthenticationOptions, MicrosoftAccountAuthenticationProvider, MicrosoftAccountAuthenticatedContext>
+                ("MicrosoftOAuth", (context) => {
+                    context.Identity.AddClaim(new Claim("urn:microsoftaccount:accesstoken", context.AccessToken));
+                }));
+
+            app.UseGitHubAuthentication(app.GetCredentials<GitHubAuthenticationOptions, GitHubAuthenticationProvider, GitHubAuthenticatedContext>
+                ("GithubOAuth", (context) => {
+                    context.Identity.AddClaim(new Claim("urn:github:accesstoken", context.AccessToken));
+                    context.Identity.AddClaim(new Claim("urn:github:link", context.Link));
+                    context.Identity.AddClaim(new Claim("urn:github:avatar", context.User.Value<string>("avatar_url")));
+                }));
+
+            //app.UseLinkedInAuthentication(app.GetCredentials<LinkedInAuthenticationOptions>("LinkedInOAuth"));
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",

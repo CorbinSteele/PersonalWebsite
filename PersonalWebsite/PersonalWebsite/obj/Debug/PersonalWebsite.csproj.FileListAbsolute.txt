@@ -64,3 +64,4 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlS
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.csprojResolveAssemblyReference.cache
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Owin.Security.Providers.dll

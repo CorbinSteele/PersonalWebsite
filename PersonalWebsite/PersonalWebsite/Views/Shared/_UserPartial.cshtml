@@ -9,9 +9,18 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink("Hello " + this.ExternalUserData((c) => !c.Type.StartsWith("http") && c.Type.EndsWith("name")) + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        @{
+            string avatarUrl = this.ExternalUserData("urn:github:avatar");
+            if (avatarUrl != null)
+            {
+                <li>
+                    <a href="/Manage" style="padding: 0px;"><img src="@avatarUrl" width="30" style="margin-bottom: 10px;" /></a>
+                </li>
+            }
+        }
     </ul>
     }
 }

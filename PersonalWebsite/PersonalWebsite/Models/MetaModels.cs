@@ -2,7 +2,11 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PersonalWebsite.Models
 {
@@ -34,6 +38,28 @@ namespace PersonalWebsite.Models
             this.displaySize = displaySize;
         }
     }
+    public static class LinqExtensions
+    {
+        public static bool Contains<T>(this IEnumerable<T> enumerable, T value, Func<T, T, bool> comparer)
+        {
+            return enumerable.Contains(value, new FuncEqualityComparer<T>(comparer));
+        }
+        public static IEnumerable<T> Intersect<T>(this IEnumerable<T> first, IEnumerable<T> second, Func<T, T, bool> comparer)
+        {
+            return first.Intersect(second, new FuncEqualityComparer<T>(comparer));
+        }
+        private class FuncEqualityComparer<T> : IEqualityComparer<T>
+        {
+            readonly Func<T, T, bool> _comparer;
+            readonly Func<T, int> _hash;
+            // NB Cannot assume anything about how e.g., t.GetHashCode() interacts with the comparer's behavior
+            public FuncEqualityComparer(Func<T, T, bool> comparer) : this(comparer, t => 0) {}
+            public FuncEqualityComparer(Func<T, T, bool> comparer, Func<T, int> hash)
+            { _comparer = comparer; _hash = hash; }
+            public bool Equals(T x, T y) { return _comparer(x, y); }
+            public int GetHashCode(T obj) { return _hash(obj); }
+        }
+    }
     public static class ControllerExtensions
     {
         public static ApplicationDbContext GetDb(this Controller controller)
@@ -42,47 +68,74 @@ namespace PersonalWebsite.Models
         }
         public static ApplicationUserManager GetUserManager(this Controller controller)
         {
-            return controller.HttpContext.GetOwinContext().Get<ApplicationUserManager>();
+            return controller.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();//.Get<ApplicationUserManager>();
         }
-        public async static Task<ApplicationUser> GetAppUserAsync(this Controller controller)
+        public static ApplicationUser GetAppUserAsync(this Controller controller)
         {
-            return await controller.GetUserManager().FindByNameAsync(controller.User.Identity.Name);
+            return controller.GetUserManager().FindById(controller.User.Identity.GetUserId());
         }
         public static void AddTemp<T>(this Controller controller, ITempable tempable, string key, T value)
         {
-            string token = System.Guid.NewGuid().ToString();
+            string token = Guid.NewGuid().ToString();
             tempable.TempTokens.Add(key, token);
             controller.TempData.Add(token, value);
         }
         public static T GetTemp<T>(this Controller controller, ITempable tempable, string key)
         {
             string token;
-            object value;
-            if (!tempable.TempTokens.TryGetValue(key, out token) || !controller.TempData.TryGetValue(token, out value))
+            if (!tempable.TempTokens.TryGetValue(key, out token))
                 return default(T);
-            if (value is T)
+            object value = controller.TempData.Peek(token);
+            if (value == null)
+                return default(T);
+            else if (value is T)
                 return (T)value;
             else
-                try { return (T)System.Convert.ChangeType(value, typeof(T)); }
-                catch (System.InvalidCastException) { return default(T); }
+                try { return (T)Convert.ChangeType(value, typeof(T)); }
+                catch (InvalidCastException) { return default(T); }
         }
         public static void ClearTemp(this Controller controller, ITempable tempable)
         {
             controller.TempData.Clear();
             tempable.TempTokens.Clear();
         }
-        public static string ViewAsContent(this Controller controller, string viewName, object model)
+    }
+    public static class ViewExtensions
+    {
+        // Will return external data by type
+        public static string ExternalUserData(this WebViewPage view, string claimType)
         {
-            controller.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
-            controller.ViewData.Model = model;
-            using (var sw = new System.IO.StringWriter())
+            return (view.User.Identity as System.Security.Claims.ClaimsIdentity).FindFirstValue(claimType);
+        }
+        // Will return the first external data that matches the match
+        public static string ExternalUserData(this WebViewPage view, Predicate<System.Security.Claims.Claim> match)
+        {
+            return (view.User.Identity as System.Security.Claims.ClaimsIdentity).FindFirst(match).Value;
+        }
+    }
+    public static class AppBuilderExtensions
+    {
+        public static T GetCredentials<T,P,C>(this Owin.IAppBuilder app, string key, System.Action<C> onAuthentication = null)
+            where T : Microsoft.Owin.Security.AuthenticationOptions, new()
+            where P : new() // Authentication Provider Type (Why is there no base class for this?)
+            where C : Microsoft.Owin.Security.Provider.BaseContext
+        {
+            string[] creds = System.Configuration.ConfigurationManager.AppSettings[key].Split(',');
+            dynamic options = new T();
+            try
             {
-                var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, viewName);
-                var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(controller.ControllerContext, viewResult.View);
-                return sw.GetStringBuilder().ToString();
+                if (onAuthentication != null) {
+                    options.Provider = new P();
+                    options.Provider.OnAuthenticated = new Func<C, Task>(
+                        async (context) => await Task.Run(() => onAuthentication(context)));
+                }
+                options.ClientId = creds[0];
+                options.ClientSecret = creds[1];
+                for (int i = 2; i < creds.Length; i++)
+                    options.Scope.Add(creds[i]);
             }
+            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException e) { }
+            return options;
         }
     }
 }
