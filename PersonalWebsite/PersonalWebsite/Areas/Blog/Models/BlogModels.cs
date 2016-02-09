@@ -46,18 +46,25 @@ namespace PersonalWebsite.Areas.Blog.Models
         public Comment()
         {
             this.Comments = new HashSet<Comment>();
+            this.CommentContents = new HashSet<CommentContent>();
         }
 
         public int CommentID { get; set; }
         public int PostID { get; set; }
-        public int ParentCommentID { get; set; }
+        public int? ParentCommentID { get; set; }
         public string AuthorID { get; set; }
-        public DateTimeOffset? CreatedOn { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
 
         public virtual Post Post { get; set; }
-        public virtual Comment ParentComment { get; set; }
+        public virtual Comment Parent { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ApplicationUser Author { get; set; }
+        public virtual ICollection<CommentContent> CommentContents { get; set; }
+
+        public CommentContent Content
+        {
+            get { return this.CommentContents.OrderByDescending(cc => cc.CommentContentID).First(); }
+        }
     }
     public class CommentContent
     {

@@ -1,5 +1,6 @@
 ﻿@using PersonalWebsite.Models
-@model PersonalWebsite.Areas.Blog.Models.Post
+@using PersonalWebsite.Areas.Blog.Models
+@model Post
 
 @{
     ViewBag.Title = ": " + @Model.Title;
@@ -9,12 +10,14 @@
 @if (User.IsInRole("Admin"))
 {
     <div class="row">
-        <div class="col-xs-3 col-md-4"></div>
-        @Html.Partial("_ActionsPartial", new[]
-        {
-            new ControllerAction("Posts", "Edit", ControllerAction.Sizes.Large, Model.PostID),
-            new ControllerAction("Posts", "Delete", ControllerAction.Sizes.Large, Model.PostID)
-        })
+        <div class="col-xs-3 col-sm-4"></div>
+        @{
+            Html.RenderPartial("_ActionsPartial", new[]
+            {
+                new ControllerAction("Posts", "Edit", ControllerAction.Sizes.Large, Model.PostID),
+                new ControllerAction("Posts", "Delete", ControllerAction.Sizes.Large, Model.PostID)
+            });
+        }
     </div>
 }
 <div class="sub-container-outer">
@@ -51,4 +54,20 @@
             }
         </div>
     </div>
+</div>
+<div class="sub-container-outer">
+    @if (User.Identity.IsAuthenticated)
+    {
+        Html.RenderPartial("Comments/_CommentCreatePartial", new CommentView(Model.PostID, null));
+    }
+    else
+    {
+        <div class="sub-container-inner">
+            <h5>You must be logged in to leave comments!</h5>
+        </div>
+    }
+    @foreach (Comment comment in Model.Comments.Where((c) => c.ParentCommentID == null))
+    {
+        Html.RenderPartial("Comments/_CommentPartial", comment);
+    }
 </div>

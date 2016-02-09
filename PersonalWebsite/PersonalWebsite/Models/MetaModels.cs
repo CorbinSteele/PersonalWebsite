@@ -70,10 +70,10 @@ namespace PersonalWebsite.Models
         {
             return controller.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();//.Get<ApplicationUserManager>();
         }
-        public static ApplicationUser GetAppUserAsync(this Controller controller)
-        {
-            return controller.GetUserManager().FindById(controller.User.Identity.GetUserId());
-        }
+        //public static async Task<ApplicationUser> GetAppUserAsync(this Controller controller)
+        //{
+        //    return await controller.GetUserManager().FindByIdAsync(controller.User.Identity.GetUserId());
+        //}
         public static void AddTemp<T>(this Controller controller, ITempable tempable, string key, T value)
         {
             string token = Guid.NewGuid().ToString();
@@ -102,15 +102,20 @@ namespace PersonalWebsite.Models
     }
     public static class ViewExtensions
     {
-        // Will return external data by type
-        public static string ExternalUserData(this WebViewPage view, string claimType)
+        // Will return external user data by type
+        public static string ExternalUserData(this WebViewPage view, ApplicationUser user, string claimType)
         {
-            return (view.User.Identity as System.Security.Claims.ClaimsIdentity).FindFirstValue(claimType);
+            return user.Claims.FirstOrDefault(c => c.ClaimType == claimType).ClaimValue;
         }
-        // Will return the first external data that matches the match
-        public static string ExternalUserData(this WebViewPage view, Predicate<System.Security.Claims.Claim> match)
+        // Will return external user data by type
+        public static string ExternalUserData(this WebViewPage view, System.Security.Principal.IIdentity user, string claimType)
         {
-            return (view.User.Identity as System.Security.Claims.ClaimsIdentity).FindFirst(match).Value;
+            return (user as System.Security.Claims.ClaimsIdentity).FindFirstValue(claimType);
+        }
+        // Will return the first external user data that matches the match
+        public static string ExternalUserData(this WebViewPage view, System.Security.Principal.IIdentity user, Predicate<System.Security.Claims.Claim> match)
+        {
+            return (user as System.Security.Claims.ClaimsIdentity).FindFirst(match).Value;
         }
     }
     public static class AppBuilderExtensions

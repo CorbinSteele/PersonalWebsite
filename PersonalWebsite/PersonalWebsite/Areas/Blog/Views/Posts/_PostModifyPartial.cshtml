@@ -11,10 +11,10 @@
 <div class="form-group">
     @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
-        <textarea class="form-control" id="Content" name="Content" type="text">@((Model == null) ? "" : Model.Content)</textarea>
+        <textarea class="form-control post-edit" id="Content" name="Content" type="text">@((Model == null) ? "" : Model.Content)</textarea>
         <!--@Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })-->
         @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
     </div>
 </div>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-<script>tinymce.init({ selector: '#Content' });</script>
+<script>tinymce.init({ selector: '.post-edit' });</script>

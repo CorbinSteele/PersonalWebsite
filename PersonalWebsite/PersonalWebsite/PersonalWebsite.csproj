@@ -188,6 +188,7 @@
     <Compile Include="Areas\About\AboutAreaRegistration.cs" />
     <Compile Include="Areas\About\Controllers\HomeController.cs" />
     <Compile Include="Areas\Blog\BlogAreaRegistration.cs" />
+    <Compile Include="Areas\Blog\Controllers\CommentsController.cs" />
     <Compile Include="Areas\Blog\Controllers\PostsController.cs" />
     <Compile Include="Areas\Blog\Models\BlogViewModels.cs" />
     <Compile Include="Areas\Blog\Models\BlogModels.cs" />
@@ -321,8 +322,13 @@
     <Content Include="Areas\Blog\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Blog\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Blog\Views\Shared\_ActionsPartial.cshtml" />
-    <Content Include="Areas\Blog\Views\Shared\PostModify.cshtml" />
-    <Content Include="Areas\Blog\Views\Shared\_TempTokensPartial.cshtml" />
+    <Content Include="Areas\Blog\Views\Posts\_PostModifyPartial.cshtml" />
+    <Content Include="Views\Shared\_TempTokensPartial.cshtml" />
+    <Content Include="Areas\Blog\Views\Shared\Comments\_CommentPartial.cshtml" />
+    <Content Include="Areas\Blog\Views\Shared\Comments\_CommentCreatePartial.cshtml" />
+    <Content Include="Areas\Blog\Views\Shared\Comments\_CommentModifyPartial.cshtml" />
+    <Content Include="Areas\Blog\Views\Comments\Details.cshtml" />
+    <Content Include="Areas\Blog\Views\Shared\Comments\_CommentEditPartial.cshtml" />
     <None Include="Areas\CarFinder\Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -401,6 +407,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_RegisterPartial.cshtml" />
     <Content Include="Views\Shared\_ExternalLoginPartial.cshtml" />
+    <Content Include="Views\Shared\_UserAvatarPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\CarFinder\NgApp\Filters\" />

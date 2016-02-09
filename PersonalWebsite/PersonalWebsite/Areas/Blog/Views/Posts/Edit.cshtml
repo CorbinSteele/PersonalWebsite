@@ -13,8 +13,10 @@
         @Html.HiddenFor(model => model.Title)
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.Partial("_TempTokensPartial", Model.TempTokens)
-        @Html.Partial("PostModify", Model)
+        @{
+            Html.RenderPartial("_TempTokensPartial", Model.TempTokens);
+            Html.RenderPartial("_PostModifyPartial", Model);
+        }
         @if (!Model.DoPublish)
         {
             <div class="form-group">

@@ -11,11 +11,6 @@ namespace PersonalWebsite.Controllers
     {
         public ActionResult Index()
         {
-            /*if (User.Identity.IsAuthenticated)
-            {
-                var x = this.GetAppUserAsync();
-                var result = x.Claims.SingleOrDefault((c) => c.ClaimType == "urn:microsoft:emailaddress").ClaimValue;
-            }*/
             return View();
         }
     }

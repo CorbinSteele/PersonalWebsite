@@ -7,107 +7,108 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using PersonalWebsite.Areas.Blog.Models;
 using PersonalWebsite.Models;
-using Microsoft.AspNet.Identity;
 
 namespace PersonalWebsite.Areas.Blog.Controllers
 {
-    public class PostsController : Controller
+    public class CommentsController : Controller
     {
-        // GET: Blog/Posts
-        public async Task<ActionResult> Index()
-        {
-            return View((await this.GetDb().Posts.ToListAsync()));
-        }
-
-        // GET: Blog/Posts/Details/5
-        // GET: Blog/Post/5
+        // GET: Blog/Comments/Details/5
+        [Authorize(Roles="Admin,Moderator")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await this.GetDb().Posts.FindAsync(id);
-            if (post == null)
+            Comment comment = await this.GetDb().Comments.FindAsync(id);
+            if (comment == null)
             {
                 return HttpNotFound();
             }
-            return View(post);
+            return View(comment);
         }
 
-        // GET: Blog/Posts/Create
-        [Authorize(Roles = "Admin")]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Blog/Posts/Create
+        // POST: Blog/Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Create([Bind(Include = "Title,Extract,Content,DoPublish")] PostView postView)
+        [Authorize]
+        public async Task<ActionResult> Create([Bind(Include = "PostID,ParentCommentID,Content")] CommentView commentView)
         {
             if (ModelState.IsValid)
             {
-                Post post = new Post();
-                post.AuthorID = User.Identity.GetUserId();
-                post.Title = postView.Title;
-                if (postView.DoPublish)
-                    post.CreatedOn = new DateTimeOffset(DateTime.Now);
-                post = this.GetDb().Posts.Add(post);
+                Comment comment = new Comment();
+                if (!await this.GetDb().Posts.AnyAsync(p => p.PostID == commentView.PostID))
+                    return new EmptyResult();
+                comment.PostID = commentView.PostID;
+                if (await this.GetDb().Comments.AnyAsync(c => c.CommentID == commentView.ParentCommentID))
+                    comment.ParentCommentID = commentView.ParentCommentID;
+                comment.AuthorID = User.Identity.GetUserId();
+                comment.CreatedOn = new DateTimeOffset(DateTime.Now);
+                comment = this.GetDb().Comments.Add(comment);
                 await this.GetDb().SaveChangesAsync();
 
-                PostContent postContent = new PostContent();
-                postContent.PostID = post.PostID;
-                postContent.Extract = postView.Extract;
-                postContent.Content = postView.Content;
-                this.GetDb().PostContents.Add(postContent);
+                CommentContent commentContent = new CommentContent();
+                commentContent.CommentID = comment.CommentID;
+                commentContent.Content = commentView.Content;
+                this.GetDb().CommentContents.Add(commentContent);
                 await this.GetDb().SaveChangesAsync();
-                return RedirectToAction("Index");
+                return PartialView("Comments/_CommentPartial", comment);
             }
-            return View(postView);
+            return new EmptyResult();
         }
 
-        // GET: Blog/Posts/Edit/5
-        [Authorize(Roles = "Admin")]
+        // GET: Blog/Comments/Edit/5
+        [Authorize]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await this.GetDb().Posts.FindAsync(id);
-            if (post == null)
+            Comment comment = await this.GetDb().Comments.FindAsync(id);
+            if (comment == null)
             {
-                return HttpNotFound();
+                return new EmptyResult();
             }
-            EditedPostView postView = new EditedPostView(post);
-            this.AddTemp(postView, "PostID", post.PostID);
-            return View(postView);
+            EditedCommentView commentView = new EditedCommentView(comment);
+            this.AddTemp(commentView, "CommentID", comment.CommentID);
+            return PartialView("Comments/_CommentEditPartial", commentView);
         }
 
-        // POST: Blog/Posts/Edit/5
+        // POST: Blog/Comments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Title,Extract,Content,DoPublish,UpdateReason,IsDeleted")] EditedPostView postView)
+        [Authorize]
+        public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Content,UpdateReason,IsDeleted")] EditedCommentView commentView)
         {
-            Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));//.FirstAsync(p => p.Title == postView.Title);
-            if (post == null)
+            Comment comment = await this.GetDb().Comments.FindAsync(this.GetTemp<int>(commentView, "CommentID"));
+            if (comment == null)
             {
-                this.ClearTemp(postView);
-                return RedirectToAction("Index");
+                this.ClearTemp(commentView);
+                return new EmptyResult();
             }
-            /*ModelState value;
-            if (ModelState.TryGetValue("Title", out value))
-                value.Errors.Clear();*/
+            if (ModelState.IsValid)
+            {
+                CommentContent commentContent = new CommentContent();
+                commentContent.CommentID = comment.CommentID;
+                commentContent.EditorID = User.Identity.GetUserId();
+                commentContent.UpdatedOn = new DateTimeOffset(DateTime.Now);
+                commentContent.UpdateReason = commentView.UpdateReason;
+                commentContent.IsDeleted = commentView.IsDeleted;
+                commentContent.Content = commentView.Content;
+                this.GetDb().CommentContents.Add(commentContent);
+                this.ClearTemp(commentView);
+                await this.GetDb().SaveChangesAsync();
+            }
+            return PartialView("Comments/_CommentPartial", comment);
+            /*
             if (ModelState.IsValid && (postView.DoPublish || post.CreatedOn == null))
             {
                 PostContent postContent = await this.GetDb().PostContents.FirstAsync(pc => pc.PostID == post.PostID);
@@ -152,10 +153,11 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             if (postView.DoPublish && post.CreatedOn == null)
                 postView.DoPublish = false;
             postView.Title = post.Title;
-            return View(postView);
+             */
+            return View();
         }
-        // GET: Blog/Posts/Delete/5
-        [Authorize(Roles = "Admin")]
+        // GET: Blog/Comments/Delete/5
+        [Authorize]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -172,12 +174,13 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             return View(deleteView);
         }
 
-        // POST: Blog/Posts/Delete/5
+        // POST: Blog/Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> DeleteConfirmed([Bind(Include = "TempTokens,UpdateReason")] EditedPostView postView)
+        [Authorize]
+        public async Task<ActionResult> DeleteConfirmed([Bind(Include = "TempTokens,UpdateReason")] EditedCommentView commentView)
         {
+            /*
             Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));
             if (post.Content.IsDeleted) // It was previously deleted
                 return RedirectToAction("Index");
@@ -199,6 +202,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 this.GetDb().PostContents.Add(postContent);
             }
             await this.GetDb().SaveChangesAsync();
+             */
             return RedirectToAction("Index");
         }
 

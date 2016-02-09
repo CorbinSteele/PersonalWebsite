@@ -56,5 +56,14 @@ namespace PersonalWebsite.Models
         public DbSet<PostContent> PostContents { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CommentContent> CommentContents { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Comment>().
+              HasOptional(c => c.Parent).
+              WithMany(c => c.Comments).
+              HasForeignKey(c => c.ParentCommentID);
+        }
     }
 }

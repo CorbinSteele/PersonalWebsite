@@ -36,7 +36,7 @@
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
         
-        @Html.Partial("_TempTokensPartial", Model.TempTokens)
+        @{Html.RenderPartial("_TempTokensPartial", Model.TempTokens);}
 
         <div class="form-horizontal">
             <div class="form-group">

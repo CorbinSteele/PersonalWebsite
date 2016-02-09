@@ -2,9 +2,11 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Perso
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\PersonalWebsite.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\PersonalWebsite.pdb
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Documentation.XML
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Antlr3.Runtime.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\EntityFramework.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\EntityFramework.SqlServer.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.AspNet.Identity.Core.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.AspNet.Identity.Owin.dll
@@ -20,6 +22,7 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Micro
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Web.Infrastructure.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Newtonsoft.Json.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Owin.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Owin.Security.Providers.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Net.Http.Formatting.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.Helpers.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.Http.dll
@@ -31,6 +34,8 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Syste
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.WebPages.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.WebPages.Razor.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\WebGrease.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.xml
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.Helpers.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.Mvc.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\System.Web.Optimization.xml
@@ -59,9 +64,4 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Micro
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.pdb
-E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.dll
-E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.dll
-E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.xml
-E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.csprojResolveAssemblyReference.cache
-E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Owin.Security.Providers.dll

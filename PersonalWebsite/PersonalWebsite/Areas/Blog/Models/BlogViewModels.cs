@@ -44,11 +44,10 @@ namespace PersonalWebsite.Areas.Blog.Models
         {
             this.DoPublish = post.CreatedOn != null;
             this.Title = post.Title;
-            PostContent postContent = post.Content;
-            this.Extract = postContent.Extract;
-            this.Content = postContent.Content;
-            this.IsDeleted = postContent.IsDeleted;
-            this.UpdateReason = postContent.UpdateReason;
+            this.Extract = post.Content.Extract;
+            this.Content = post.Content.Content;
+            this.IsDeleted = post.Content.IsDeleted;
+            this.UpdateReason = post.Content.UpdateReason;
         }
         public Dictionary<string, string> TempTokens { get; set; }
         [StringLength(100, ErrorMessage = "The {0} must be no more than {1} characters long.")]
@@ -59,18 +58,38 @@ namespace PersonalWebsite.Areas.Blog.Models
     }
     public class CommentView
     {
+        public CommentView() { }
+        public CommentView(int postId, int? parentCommentID)
+        {
+            this.PostID = postId;
+            this.ParentCommentID = parentCommentID;
+        }
         [Required]
-        public Post Post { get; set; }
-        public Comment ParentComment { get; set; }
+        public int PostID { get; set; }
+        public int? ParentCommentID { get; set; }
+        private string content;
         [Required]
         [Display(Name = "Comment")]
-        public string Content { get; set; }
+        [System.Web.Mvc.AllowHtml]
+        public string Content
+        {
+            get { return content; }
+            set { content = Microsoft.Security.Application.Sanitizer.GetSafeHtmlFragment(value).Trim(); }
+        }
     }
     public class EditedCommentView : CommentView, ITempable
     {
         public EditedCommentView()
         {
             TempTokens = new Dictionary<string, string>();
+        }
+        public EditedCommentView(Comment comment) : this()
+        {
+            this.PostID = comment.PostID;
+            this.ParentCommentID = comment.ParentCommentID;
+            this.Content = comment.Content.Content;
+            this.UpdateReason = comment.Content.UpdateReason;
+            this.IsDeleted = comment.Content.IsDeleted;
         }
         public Dictionary<string, string> TempTokens { get; set; }
         [Display(Name = "Edit Reason")]

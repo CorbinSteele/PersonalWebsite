@@ -13,6 +13,8 @@ namespace PersonalWebsite
     {
         protected void Application_Start()
         {
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new RazorViewEngine());
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -27,6 +29,10 @@ namespace PersonalWebsite
             // If you have enabled SSL. Uncomment this line to ensure that the Anti-Forgery 
             // cookie requires SSL to be sent accross the wire. 
             // AntiForgeryConfig.RequireSsl = true;
+        }
+        protected void Application_EndRequest()
+        {
+            var x = Context.AllErrors;
         }
     }
 }

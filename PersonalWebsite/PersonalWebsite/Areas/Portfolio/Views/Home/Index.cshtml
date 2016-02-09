@@ -39,7 +39,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">@project.Title</h4>
                 </div>
-                @Html.Partial(project.Modal.Value)
+                @{Html.RenderPartial(project.Modal.Value);}
             </div>
         </div>
     </div>

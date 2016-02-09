@@ -1,12 +1,12 @@
 ﻿@model PersonalWebsite.Models.ControllerAction[]
 @foreach (PersonalWebsite.Models.ControllerAction action in Model)
 {
-    <div style="text-align: right;" class="col-sm-3 col-md-2">
+    <div style="text-align: right;" class="col-xs-3 col-sm-2">
         <button class="@("btn btn-primary btn-" + action.DisplaySize)" style="position: relative; width: 100%;">
             <a href="@Url.RouteUrl("Blog_Default", new { controller=action.Controller, action=action.Action, id=action.Id })">
                 <span class="sub-container-link"></span>
             </a>
-            @action.Action @action.Controller.TrimEnd('s')
+            @action.Action
         </button>
 
     </div>
