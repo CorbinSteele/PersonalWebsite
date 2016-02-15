@@ -13,7 +13,7 @@ namespace PersonalWebsite.Areas.CarFinder.Controllers
 {
     public class CarsController : ApiController
     {
-        private const string CONNECTION_STRING = "AzureCarfinderConnection";
+        private const string CONNECTION_STRING = "CarFinderConnection";
 
         private readonly static HttpClient client = new HttpClient();
         private readonly static Bing.BingSearchContainer bingContainer;

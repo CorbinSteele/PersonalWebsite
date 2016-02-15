@@ -1,0 +1,86 @@
+﻿@using PersonalWebsite.Models
+@model PersonalWebsite.Areas.Blog.Models.Comment
+
+<div class="sub-container-inner">
+    <div class="row" id="comment-@Model.CommentID"style="padding:15px; margin-top: -15px;">
+        <div class="col-xs-12" style="padding: 0px;">
+            <div class="col-xs-2">
+                @{Html.RenderPartial("_UserAvatarPartial", Model.Author);}
+                <h4 style="text-align:left">@Model.Author.FirstName @Model.Author.LastName</h4>
+                <h5 style="text-align:center">
+                    <small>
+                        @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.CreatedOn.Month)
+                        @Model.CreatedOn.Day, @Model.CreatedOn.Year
+                    </small>
+                </h5>
+            </div>
+            <div class="col-xs-10" style="margin-bottom: 30px;">
+                @if (!Model.Content.IsDeleted)
+                {
+                    <div class="col-xs-12">
+                        @Html.Raw(Model.Content.Content)
+                    </div>
+                }
+                @if (Model.Content.UpdatedOn != null)
+                {
+                    <div class="col-xs-12">
+                        <small style="text-align:center">
+                            @(Model.Content.IsDeleted ? "Deleted" : "Updated") on
+                            @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.Content.UpdatedOn.Value.Month)
+                            @Model.Content.UpdatedOn.Value.Day, @Model.Content.UpdatedOn.Value.Year,
+                            by @Model.Content.EditorID @(Model.Content.UpdateReason != null ? "because: " + Model.Content.UpdateReason : "")
+                        </small>
+                    </div>
+                }
+            </div>
+            <div class="row" style="position: absolute; width: 100%; bottom: 0px;">
+                <div class="col-xs-6 col-sm-8"></div>
+                @if (Model.Author.UserName != User.Identity.Name)
+                {
+                    <div class="col-xs-3 col-sm-2"></div>
+                }
+                @if (false)//User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    Html.RenderPartial("_ActionsPartial", new[] {
+                        new ControllerAction("Comments", "Details", ControllerAction.Sizes.Small, Model.CommentID)
+                    });
+                }
+                else
+                {
+                    <div class="col-xs-3 col-sm-2"></div>
+                }
+                @if (Model.Author.UserName == User.Identity.Name || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    <div style="text-align: right;" class="col-xs-3 col-sm-2">
+                        @using (Ajax.BeginForm("Edit", "Comments", new { area = "Blog", id = Model.CommentID },
+                            new AjaxOptions
+                            {
+                                HttpMethod = "GET",
+                                InsertionMode = InsertionMode.ReplaceWith,
+                                UpdateTargetId = "comment-" + Model.CommentID
+                            }, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" style="position: relative; width: 100%;">
+                        }
+                    </div>
+                    //Html.RenderPartial("_ActionsPartial", new[] {
+                    //    new ControllerAction("Comments", "Edit", ControllerAction.Sizes.Small, Model.CommentID),
+                    //    new ControllerAction("Comments", "Delete", ControllerAction.Sizes.Small, Model.CommentID)
+                    //});
+                }
+                @*@if (User.Identity.IsAuthenticated)
+                {
+                    Html.RenderPartial("_ActionsPartial", new[] {
+                        new ControllerAction("Comments", "Create", ControllerAction.Sizes.Small, Model.CommentID)
+                    });
+                }*@
+            </div>
+        </div>
+        <div class="col-xs-offset-1 col-xs-11">
+            @foreach (PersonalWebsite.Areas.Blog.Models.Comment comment in Model.Comments)
+            {
+                Html.RenderPartial("_CommentPartial", comment);
+            }
+        </div>
+    </div>
+</div>

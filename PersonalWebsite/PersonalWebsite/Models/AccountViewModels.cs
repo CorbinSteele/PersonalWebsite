@@ -5,9 +5,11 @@ namespace PersonalWebsite.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
+        public string ReturnUrl { get; set; }
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        public IList<Microsoft.AspNet.Identity.UserLoginInfo> ExistingLogins { get; set; }
     }
 
     public class ExternalLoginListViewModel

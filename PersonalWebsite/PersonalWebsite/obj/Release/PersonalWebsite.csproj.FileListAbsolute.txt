@@ -59,3 +59,8 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Micro
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Release\PersonalWebsite.csprojResolveAssemblyReference.cache
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Release\PersonalWebsite.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Release\PersonalWebsite.pdb
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Owin.Security.Providers.dll
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\AntiXssLibrary.xml
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\HtmlSanitizationLibrary.xml

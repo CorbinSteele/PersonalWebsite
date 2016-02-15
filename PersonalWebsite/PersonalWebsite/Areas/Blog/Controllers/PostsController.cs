@@ -15,10 +15,12 @@ namespace PersonalWebsite.Areas.Blog.Controllers
 {
     public class PostsController : Controller
     {
+        private BlogDbContext GetDb() { return this.GetDb<BlogDbContext>(); }
+
         // GET: Blog/Posts
         public async Task<ActionResult> Index()
         {
-            return View((await this.GetDb().Posts.ToListAsync()));
+            return View(await GetDb().Posts.ToListAsync());
         }
 
         // GET: Blog/Posts/Details/5
@@ -29,8 +31,8 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await this.GetDb().Posts.FindAsync(id);
-            if (post == null)
+            Post post = await GetDb().Posts.FindAsync(id);
+            if (post == null || (post.CreatedOn == null && post.AuthorID != User.Identity.GetUserId()))
             {
                 return HttpNotFound();
             }
@@ -59,15 +61,15 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 post.Title = postView.Title;
                 if (postView.DoPublish)
                     post.CreatedOn = new DateTimeOffset(DateTime.Now);
-                post = this.GetDb().Posts.Add(post);
-                await this.GetDb().SaveChangesAsync();
+                post = GetDb().Posts.Add(post);
+                await GetDb().SaveChangesAsync();
 
                 PostContent postContent = new PostContent();
                 postContent.PostID = post.PostID;
                 postContent.Extract = postView.Extract;
                 postContent.Content = postView.Content;
-                this.GetDb().PostContents.Add(postContent);
-                await this.GetDb().SaveChangesAsync();
+                GetDb().PostContents.Add(postContent);
+                await GetDb().SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(postView);
@@ -81,7 +83,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await this.GetDb().Posts.FindAsync(id);
+            Post post = await GetDb().Posts.FindAsync(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -99,7 +101,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Title,Extract,Content,DoPublish,UpdateReason,IsDeleted")] EditedPostView postView)
         {
-            Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));//.FirstAsync(p => p.Title == postView.Title);
+            Post post = await GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));//.FirstAsync(p => p.Title == postView.Title);
             if (post == null)
             {
                 this.ClearTemp(postView);
@@ -110,27 +112,27 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 value.Errors.Clear();*/
             if (ModelState.IsValid && (postView.DoPublish || post.CreatedOn == null))
             {
-                PostContent postContent = await this.GetDb().PostContents.FirstAsync(pc => pc.PostID == post.PostID);
+                PostContent postContent = await GetDb().PostContents.FirstAsync(pc => pc.PostID == post.PostID);
                 if (!postView.DoPublish) // This is a draft that needs to not be published
                 {
                     postContent.Extract = postView.Extract;
                     postContent.Content = postView.Content;
-                    this.GetDb().Entry(postContent).State = EntityState.Modified;
+                    GetDb().Entry(postContent).State = EntityState.Modified;
                 }
                 else if (post.CreatedOn == null) // This is an edited draft
                 {
                     if (postView.IsDeleted) // The draft needs to be deleted
                     {
-                        this.GetDb().PostContents.Remove(postContent);
-                        this.GetDb().Posts.Remove(post);
+                        GetDb().PostContents.Remove(postContent);
+                        GetDb().Posts.Remove(post);
                     }
                     else // The draft needs to be published
                     {
                         post.CreatedOn = new DateTimeOffset(DateTime.Now);
-                        this.GetDb().Entry(post).State = EntityState.Modified;
+                        GetDb().Entry(post).State = EntityState.Modified;
                         postContent.Extract = postView.Extract;
                         postContent.Content = postView.Content;
-                        this.GetDb().Entry(postContent).State = EntityState.Modified;
+                        GetDb().Entry(postContent).State = EntityState.Modified;
                     }
                 }
                 else // This is a pre-existing post
@@ -143,10 +145,10 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                     postContent.Extract = postView.Extract;
                     postContent.Content = postView.Content;
                     postContent.IsDeleted = postView.IsDeleted;
-                    this.GetDb().PostContents.Add(postContent);
+                    GetDb().PostContents.Add(postContent);
                 }
                 this.ClearTemp(postView);
-                await this.GetDb().SaveChangesAsync();
+                await GetDb().SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             if (postView.DoPublish && post.CreatedOn == null)
@@ -162,7 +164,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await this.GetDb().Posts.FindAsync(id);
+            Post post = await GetDb().Posts.FindAsync(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -178,13 +180,13 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed([Bind(Include = "TempTokens,UpdateReason")] EditedPostView postView)
         {
-            Post post = await this.GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));
+            Post post = await GetDb().Posts.FindAsync(this.GetTemp<int>(postView, "PostID"));
             if (post.Content.IsDeleted) // It was previously deleted
                 return RedirectToAction("Index");
             if (post.CreatedOn == null) // It's a draft
             {
-                this.GetDb().PostContents.Remove(post.Content);
-                this.GetDb().Posts.Remove(post);
+                GetDb().PostContents.Remove(post.Content);
+                GetDb().Posts.Remove(post);
             }
             else // It's a previously published post
             {
@@ -196,9 +198,9 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 postContent.Extract = post.Content.Extract;
                 postContent.Content = post.Content.Content;
                 postContent.IsDeleted = true;
-                this.GetDb().PostContents.Add(postContent);
+                GetDb().PostContents.Add(postContent);
             }
-            await this.GetDb().SaveChangesAsync();
+            await GetDb().SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

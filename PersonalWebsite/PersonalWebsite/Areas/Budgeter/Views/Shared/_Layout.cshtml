@@ -1,0 +1,48 @@
+﻿@section Styles
+{
+    <!-- Needs images, font... therefore can not be part of main.css -->
+    <!--<link rel="stylesheet" href="~/Areas/Budgeter/Slim/fonts/themify-icons/themify-icons.min.css">
+        <link rel="stylesheet" href="~/Areas/Budgeter/Slim/styles/main.css">-->
+    @*@Styles.Render("~/bundles/Budgeter/css")*@
+}
+@*@section Scripts
+{
+    @Scripts.Render("~/bundles/Budgeter/js")
+}*@
+@{
+    ViewBag.Title = "Budgeter";
+    Layout = "~/Views/Shared/_LayoutWithoutFooter.cshtml";
+}
+
+<div style="position:absolute; top:50px; bottom:0px; width:100%;">
+    @RenderBody()
+</div>
+    @*<body data-ng-app="app" id="app" class="app" data-custom-page data-off-canvas-nav data-ng-controller="AppCtrl">
+            <section data-ng-include=" 'app/layout/header.html' " id="header" class="header-container" data-ng-class="{ 'header-fixed': admin.fixedHeader,
+                                          'bg-white': ['11','12','13','14','15','16','21'].indexOf(admin.skin) >= 0,
+                                          'bg-dark': admin.skin === '31',
+                                          'bg-primary': ['22','32'].indexOf(admin.skin) >= 0,
+                                          'bg-success': ['23','33'].indexOf(admin.skin) >= 0,
+                                          'bg-info-alt': ['24','34'].indexOf(admin.skin) >= 0,
+                                          'bg-warning': ['25','35'].indexOf(admin.skin) >= 0,
+                                          'bg-danger': ['26','36'].indexOf(admin.skin) >= 0
+                         }"></section>
+            <div class="main-container">
+                <aside data-ng-include=" 'app/layout/sidebar.html' " id="nav-container" class="nav-container" data-ng-class="{ 'nav-fixed': admin.fixedSidebar,
+                                            'nav-horizontal': admin.menu === 'horizontal',
+                                            'nav-vertical': admin.menu === 'vertical',
+                                            'bg-white': ['31','32','33','34','35','36'].indexOf(admin.skin) >= 0,
+                                            'bg-dark': ['31','32','33','34','35','36'].indexOf(admin.skin) < 0
+                           }"></aside>
+                <div id="content" class="content-container">
+                    <section data-ng-view class="view-container {{admin.pageTransition.class}}">@RenderBody()</section>
+                </div>
+            </div>
+
+            <script src="~/Areas/Budgeter/Slim/scripts/vendor.js"></script>
+            <script src="~/Areas/Budgeter/Slim/scripts/ui.js"></script>
+            <script src="~/Areas/Budgeter/Slim/scripts/app.js"></script>
+        </body>*@
+    @*<div data-ng-app="app" id="app" class="app ng-scope container" data-custom-page="" data-off-canvas-nav="" data-ng-controller="AppCtrl">
+            @RenderBody()
+        </div>*@

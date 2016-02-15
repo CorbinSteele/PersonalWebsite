@@ -62,9 +62,9 @@ namespace PersonalWebsite.Models
     }
     public static class ControllerExtensions
     {
-        public static ApplicationDbContext GetDb(this Controller controller)
+        public static TContext GetDb<TContext>(this Controller controller) where TContext : System.Data.Entity.DbContext
         {
-            return controller.HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+            return controller.HttpContext.GetOwinContext().Get<TContext>();
         }
         public static ApplicationUserManager GetUserManager(this Controller controller)
         {
@@ -102,6 +102,10 @@ namespace PersonalWebsite.Models
     }
     public static class ViewExtensions
     {
+        public static ApplicationUserManager GetUserManager(this WebViewPage view)
+        {
+            return view.Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+        }
         // Will return external user data by type
         public static string ExternalUserData(this WebViewPage view, ApplicationUser user, string claimType)
         {
@@ -120,18 +124,18 @@ namespace PersonalWebsite.Models
     }
     public static class AppBuilderExtensions
     {
-        public static T GetCredentials<T,P,C>(this Owin.IAppBuilder app, string key, System.Action<C> onAuthentication = null)
-            where T : Microsoft.Owin.Security.AuthenticationOptions, new()
-            where P : new() // Authentication Provider Type (Why is there no base class for this?)
-            where C : Microsoft.Owin.Security.Provider.BaseContext
+        public static TOptions GetCredentials<TOptions,TProvider,TContext>(this Owin.IAppBuilder app, string key, System.Action<TContext> onAuthentication = null)
+            where TOptions : Microsoft.Owin.Security.AuthenticationOptions, new()
+            where TProvider : new() // Authentication Provider Type (Why is there no base class for this?)
+            where TContext : Microsoft.Owin.Security.Provider.BaseContext
         {
             string[] creds = System.Configuration.ConfigurationManager.AppSettings[key].Split(',');
-            dynamic options = new T();
+            dynamic options = new TOptions();
             try
             {
                 if (onAuthentication != null) {
-                    options.Provider = new P();
-                    options.Provider.OnAuthenticated = new Func<C, Task>(
+                    options.Provider = new TProvider();
+                    options.Provider.OnAuthenticated = new Func<TContext, Task>(
                         async (context) => await Task.Run(() => onAuthentication(context)));
                 }
                 options.ClientId = creds[0];
@@ -139,7 +143,7 @@ namespace PersonalWebsite.Models
                 for (int i = 2; i < creds.Length; i++)
                     options.Scope.Add(creds[i]);
             }
-            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException e) { }
+            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException e) { Console.WriteLine(e.Message); }
             return options;
         }
     }

@@ -19,7 +19,10 @@ namespace PersonalWebsite.Areas.Blog.Models
         public string Title { get; set; }
         public DateTimeOffset? CreatedOn { get; set; }
 
-        public virtual ApplicationUser Author { get; set; }
+        public ApplicationUser GetAuthor(ApplicationUserManager userManager)
+        {
+            return userManager.FindUserOrDefault(AuthorID).Result;
+        }
         public virtual ICollection<PostContent> PostContents { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
 
@@ -39,7 +42,10 @@ namespace PersonalWebsite.Areas.Blog.Models
         public bool IsDeleted { get; set; }
 
         public virtual Post Post { get; set; }
-        public virtual ApplicationUser Editor { get; set; }
+        public ApplicationUser GetEditor(ApplicationUserManager userManager)
+        {
+            return userManager.FindUserOrDefault(EditorID).Result;
+        }
     }
     public class Comment
     {
@@ -58,7 +64,10 @@ namespace PersonalWebsite.Areas.Blog.Models
         public virtual Post Post { get; set; }
         public virtual Comment Parent { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ApplicationUser Author { get; set; }
+        public ApplicationUser GetAuthor(ApplicationUserManager userManager)
+        {
+            return userManager.FindUserOrDefault(AuthorID).Result;
+        }
         public virtual ICollection<CommentContent> CommentContents { get; set; }
 
         public CommentContent Content
@@ -77,6 +86,9 @@ namespace PersonalWebsite.Areas.Blog.Models
         public bool IsDeleted { get; set; }
 
         public virtual Comment Comment { get; set; }
-        public virtual ApplicationUser Editor { get; set; }
+        public ApplicationUser GetEditor(ApplicationUserManager userManager)
+        {
+            return userManager.FindUserOrDefault(EditorID).Result;
+        }
     }
 }

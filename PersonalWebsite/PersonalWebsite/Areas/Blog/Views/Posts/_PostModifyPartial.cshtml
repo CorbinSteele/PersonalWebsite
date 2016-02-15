@@ -17,4 +17,15 @@
     </div>
 </div>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-<script>tinymce.init({ selector: '.post-edit' });</script>
+<script>
+    tinymce.init({
+        selector: '.post-edit',
+        plugins: 'hr preview',
+        plugin_preview_width: 1200,
+        elementpath: false,
+        height: 300,
+        resize: false,
+        menubar: false,
+        toolbar: 'undo redo | styleselect | fontselect fontsizeselect | bold italic underline | bullist numlist outdent indent hr | preview'
+    });
+</script>

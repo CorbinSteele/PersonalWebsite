@@ -1,4 +1,4 @@
-﻿.sub-container-outer { padding:1rem; background:#222222; box-shadow:0px 0px 1rem 1rem #060606 inset; }
+﻿.sub-container-outer { position:relative; padding:1rem; background:#222222; box-shadow:0px 0px 1rem 1rem #060606 inset; }
 .sub-container-inner { position:relative; margin:1rem; padding:1rem 2rem; background:#060606; box-shadow:0px 0px 1rem 1rem #222222 inset; }
 .navbar-brand { min-width: 100px; }
 .icon { font-size:50px; text-align:center; }
@@ -11,9 +11,25 @@
     font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
     padding-top: 30px;
 }
-.with-background
+.title-text > h2
 {
-    background: url('/assets/img/moon.jpg');
+    font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
+    color: #2a9fd6;
+    margin-bottom: 10px;
+}
+input[type="checkbox"].form-checkbox
+{
+    width: 38px;
+    margin: 0px;
+    -webkit-appearance: none;
+}
+input[type="checkbox"].form-checkbox:checked
+{
+    -webkit-appearance: checkbox;
+}
+body.Home
+{
+    background: url('/images/moon.jpg');
     background-size: 150%;
     background-position: center right;
     background-repeat: no-repeat;
@@ -30,7 +46,8 @@ dl { margin:1rem 2rem; }
 dt { text-align:left; }
 dd { margin:0rem 1rem 1rem; text-align:left; }
 span.sub-container-link { position:absolute; width:100%; height:100%; top:0; left: 0; z-index: 1; }
-span.sub-container-link:hover { outline: 1px dotted #2A6496; }
+span.sub-container-link.outlined:hover { outline: 1px dotted #2A6496; }
+.navbar-inverse .navbar-nav>li>a:focus { color: #888888; }
 #intro { font-size: 1.8rem}
 
 @media (min-width: 624px) {

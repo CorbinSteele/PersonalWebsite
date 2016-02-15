@@ -1,0 +1,17 @@
+﻿@using Microsoft.Owin.Security
+<div class="form-group" id="externalLoginForm">
+    @using (Html.BeginForm("ExternalLogin", "Account", new { area = "", returnUrl = HttpContext.Current.Request.RawUrl }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="socialLoginList">
+            @foreach (AuthenticationDescription p in Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes())
+            {
+                <button type="submit" class="zocial @(p.AuthenticationType == "Microsoft" ? "windows" : p.AuthenticationType.ToLower())"
+                        id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account"
+                        style="width: 100%;">
+                    @p.AuthenticationType
+                </button>
+            }
+        </div>
+    }
+</div>

@@ -11,6 +11,7 @@ namespace PersonalWebsite
             bundles.Add(new StyleBundle("~/bundles/css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/font-awesome.min.css",
+                      "~/Content/zocial.css",
                       "~/Content/custom.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
@@ -34,9 +35,19 @@ namespace PersonalWebsite
             bundles.Add(new ScriptBundle("~/bundles/CarFinder/js").Include(
                         "~/Areas/CarFinder/Scripts/angular.js",
                         "~/Areas/CarFinder/Scripts/ui-bootstrap.js",
-                        "~/Areas/CarFinder/Scripts/*.js",
-                        "~/Areas/CarFinder/NgApp/Controllers/*.js",
+                        "~/Areas/CarFinder/Scripts/angular-animate.js",
+                        "~/Areas/CarFinder/Scripts/ui-bootstrap-tpls.js",
+                        "~/Areas/CarFinder/Scripts/trNgGrid.js",
+                        "~/Areas/CarFinder/NgApp/Controllers/CarFinderController.js",
                         "~/Areas/CarFinder/NgApp/app.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/Budgeter/css").Include(
+                      "~/Areas/Budgeter/Content/main.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Budgeter/js").Include(
+                        "~/Areas/Budgeter/Scripts/vendor.js",
+                        "~/Areas/Budgeter/Scripts/ui.js",
+                        "~/Areas/Budgeter/Scripts/app.js"));
 
             /*bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));

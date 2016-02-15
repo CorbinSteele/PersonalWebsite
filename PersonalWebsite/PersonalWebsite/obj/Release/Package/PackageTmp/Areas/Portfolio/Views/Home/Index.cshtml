@@ -1,0 +1,46 @@
+﻿@model IEnumerable<PersonalWebsite.Areas.Portfolio.Models.Project>
+
+@foreach (var project in Model)
+{
+    <div class="sub-container-outer">
+        <div class="row">
+            <a href="" data-toggle="modal" data-target="#@project.Modal.Key" onclick="focusModal(null, 33, 1200)">
+                <span class="sub-container-link outlined"></span>
+            </a>
+            <h3>@project.Title</h3>
+            <div class="col-sm-5">
+                <div class="col-sm-12 col-sm-offset-1 col-md-11">
+                    <img src="@project.ImageSrc" class="img-responsive img-rounded center-block" alt="image" width="360" />
+                </div>
+                &nbsp;
+            </div>
+            <div class="col-sm-7">
+                <div class="sub-container-inner" style="margin-top:0;">
+                    <p>
+                        @project.Description
+                        <!--
+                        Multiple small Javascript exercises, all with source code and simple interfaces.
+                        The exercises include multiple examples of complex logic expressions,
+                        looping constructs, string and number manipulation,
+                        creative use of anonymous objects and functions,
+                        extensive use of the JQuery and Javascript libraries,
+                        and even one particularly interesting use of Infinity.
+                        There are only four exercises, so it won't cost too much time to check them all out!
+                        -->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="@project.Modal.Key" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">@project.Title</h4>
+                </div>
+                @{Html.RenderPartial(project.Modal.Value);}
+            </div>
+        </div>
+    </div>
+}

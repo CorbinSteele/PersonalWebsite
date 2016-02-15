@@ -187,6 +187,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\About\AboutAreaRegistration.cs" />
     <Compile Include="Areas\About\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Budgeter\BudgeterAreaRegistration.cs" />
+    <Compile Include="Areas\Budgeter\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Budgeter\Models\BudgeterModels.cs" />
+    <Compile Include="Areas\Budgeter\Models\BudgeterViewModels.cs" />
     <Compile Include="Areas\Blog\BlogAreaRegistration.cs" />
     <Compile Include="Areas\Blog\Controllers\CommentsController.cs" />
     <Compile Include="Areas\Blog\Controllers\PostsController.cs" />
@@ -239,8 +243,24 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\BlogMigrations\201602101748202_Initial.cs" />
+    <Compile Include="Migrations\BlogMigrations\201602101748202_Initial.Designer.cs">
+      <DependentUpon>201602101748202_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\BlogMigrations\Configuration.cs" />
+    <Compile Include="Migrations\BudgeterMigrations\201602111526524_Initial.cs" />
+    <Compile Include="Migrations\BudgeterMigrations\201602111526524_Initial.Designer.cs">
+      <DependentUpon>201602111526524_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\BudgeterMigrations\Configuration.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\UserMigrations\201602101732062_Initial.cs" />
+    <Compile Include="Migrations\UserMigrations\201602101732062_Initial.Designer.cs">
+      <DependentUpon>201602101732062_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserMigrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DbContextModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MetaModels.cs" />
@@ -249,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Documentation.XML" />
+    <Content Include="Areas\Budgeter\Content\main.css" />
     <Content Include="Areas\CarFinder\Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\CarFinder\Content\car-finder-app.css" />
     <Content Include="Areas\CarFinder\Content\trNgGrid.min.css" />
@@ -283,6 +304,8 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Areas\About\images\headshot.jpg" />
     <Content Include="Areas\Portfolio\images\javascript.png" />
+    <Content Include="Content\zocial.css" />
+    <Content Include="fonts\zocial\zocial.svg" />
     <Content Include="images\360-temp.png" />
     <Content Include="images\moon.jpg" />
     <Content Include="Areas\About\images\starfield.jpg" />
@@ -329,6 +352,10 @@
     <Content Include="Areas\Blog\Views\Shared\Comments\_CommentModifyPartial.cshtml" />
     <Content Include="Areas\Blog\Views\Comments\Details.cshtml" />
     <Content Include="Areas\Blog\Views\Shared\Comments\_CommentEditPartial.cshtml" />
+    <Content Include="Areas\Budgeter\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Budgeter\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Budgeter\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Budgeter\Views\web.config" />
     <None Include="Areas\CarFinder\Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -351,6 +378,10 @@
     <Content Include="Areas\Portfolio\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Portfolio\Views\Home\_JsPartial.cshtml" />
     <Content Include="Areas\Portfolio\Views\Home\_CfPartial.cshtml" />
+    <Content Include="fonts\zocial\zocial.eot" />
+    <Content Include="fonts\zocial\zocial.ttf" />
+    <Content Include="fonts\zocial\zocial.woff" />
+    <Content Include="Areas\Portfolio\Views\Home\_HbPartial.cshtml" />
     <None Include="Properties\PublishProfiles\csteele-temp - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\csteele-temp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\csteele-temp.pubxml" />
@@ -378,7 +409,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -408,6 +441,9 @@
     <Content Include="Views\Shared\_RegisterPartial.cshtml" />
     <Content Include="Views\Shared\_ExternalLoginPartial.cshtml" />
     <Content Include="Views\Shared\_UserAvatarPartial.cshtml" />
+    <Content Include="Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Views\Shared\_HeaderPartial.cshtml" />
+    <Content Include="Views\Shared\_LayoutWithoutFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\CarFinder\NgApp\Filters\" />
@@ -422,6 +458,17 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\BlogMigrations\201602101748202_Initial.resx">
+      <DependentUpon>201602101748202_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\BudgeterMigrations\201602111526524_Initial.resx">
+      <DependentUpon>201602111526524_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserMigrations\201602101732062_Initial.resx">
+      <DependentUpon>201602101732062_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

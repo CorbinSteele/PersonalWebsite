@@ -2,7 +2,7 @@
 @using System.Web.Http.Controllers
 @using System.Web.Http.Description
 @using System.Collections.ObjectModel
-@using CarFinder.Areas.HelpPage.Models
+@using PersonalWebsite.Areas.CarFinder.Areas.HelpPage.Models
 @model Collection<ApiDescription>
 
 @{
@@ -12,7 +12,7 @@
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
 }
 
-<link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+<link type="text/css" href="~/PersonalWebsite/Areas/CarFinder/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
 <header class="help-page">
     <div class="content-wrapper">
         <div class="float-left">
@@ -25,7 +25,9 @@
         <div class="content-wrapper">
             <h2>Introduction</h2>
             <p>
-                Provide a general description of your APIs here.
+                This API returns car years, makes, models, trims, and styles. It additionally allows searching for cars by
+                those attributes and returns additional car details, including pictures from Bing and recall information from
+                the National Highway Traffic Safety Administration.
             </p>
         </div>
     </section>

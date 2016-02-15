@@ -62,6 +62,10 @@ E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Micro
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.Google.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.Twitter.xml
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.Migrations.BlogMigrations.Initial.resources
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.Migrations.BudgeterMigrations.Initial.resources
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.Migrations.UserMigrations.Initial.resources
+E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.csproj.GenerateResource.Cache
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.dll
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.pdb
 E:\Quicksilver\Old Docs\Programming\CF\PersonalWebsite\PersonalWebsite\obj\Debug\PersonalWebsite.csprojResolveAssemblyReference.cache

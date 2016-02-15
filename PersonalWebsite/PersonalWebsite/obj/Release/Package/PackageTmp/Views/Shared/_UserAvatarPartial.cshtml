@@ -1,0 +1,10 @@
+﻿@using PersonalWebsite.Models
+@model ApplicationUser
+@{
+    string avatarUrl = Model == null ? this.ExternalUserData(User.Identity, "urn:github:avatar") :
+        this.ExternalUserData(Model, "urn:github:avatar");
+    if (avatarUrl != null)
+    {
+        <img class="img img-responsive" src="@avatarUrl" style="margin-bottom: 10px;" @ViewBag.ImageProperties />
+    }
+}

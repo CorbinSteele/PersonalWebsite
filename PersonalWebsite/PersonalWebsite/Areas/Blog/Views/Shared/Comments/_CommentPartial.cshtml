@@ -5,8 +5,11 @@
     <div class="row" id="comment-@Model.CommentID"style="padding:15px; margin-top: -15px;">
         <div class="col-xs-12" style="padding: 0px;">
             <div class="col-xs-2">
-                @{Html.RenderPartial("_UserAvatarPartial", Model.Author);}
-                <h4 style="text-align:left">@Model.Author.FirstName @Model.Author.LastName</h4>
+                @{
+                    ApplicationUser author = Model.GetAuthor(this.GetUserManager());
+                    Html.RenderPartial("_UserAvatarPartial", author);
+                }
+                <h4 style="text-align:left">@author.UserName</h4>
                 <h5 style="text-align:center">
                     <small>
                         @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.CreatedOn.Month)
@@ -35,7 +38,7 @@
             </div>
             <div class="row" style="position: absolute; width: 100%; bottom: 0px;">
                 <div class="col-xs-6 col-sm-8"></div>
-                @if (Model.Author.UserName != User.Identity.Name)
+                @if (author.UserName != User.Identity.Name)
                 {
                     <div class="col-xs-3 col-sm-2"></div>
                 }
@@ -49,7 +52,7 @@
                 {
                     <div class="col-xs-3 col-sm-2"></div>
                 }
-                @if (Model.Author.UserName == User.Identity.Name || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                @if (author.UserName == User.Identity.Name || User.IsInRole("Admin") || User.IsInRole("Moderator"))
                 {
                     <div style="text-align: right;" class="col-xs-3 col-sm-2">
                         @using (Ajax.BeginForm("Edit", "Comments", new { area = "Blog", id = Model.CommentID },

@@ -16,7 +16,8 @@ namespace PersonalWebsite.Areas.Portfolio.Controllers
                 "looping constructs, string and number manipulation, creative use of anonymous objects and functions, " +
                 "extensive use of the JQuery and Javascript libraries, and even one particularly interesting use of Infinity. " +
                 "There are only four exercises, so it won't cost too much time to check them all out!"),
-            new Project("Car Finder", "cf", "_CfPartial", "/images/360-temp.png", "A project that finds car data.")
+            new Project("Car Finder", "cf", "_CfPartial", "/images/360-temp.png", "A project that finds car data."),
+            new Project("Household Budgeter", "hb", "_HbPartial", "/images/360-temp.png", "A project that helps people budget.")
         };
 
         // GET: About/Home

@@ -274,17 +274,6 @@ namespace PersonalWebsite.Controllers
         }
 
         //
-        // POST: /Account/ExternalLogin
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            // Request a redirect to the external login provider
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-        }
-
-        //
         // GET: /Account/SendCode
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
@@ -320,6 +309,17 @@ namespace PersonalWebsite.Controllers
         }
 
         //
+        // POST: /Account/ExternalLogin
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            // Request a redirect to the external login provider
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+        }
+
+        //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
@@ -327,7 +327,7 @@ namespace PersonalWebsite.Controllers
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("ExternalLoginFailure");
             }
             
             // Sign in the user with this external login provider if the user already has a login
@@ -343,48 +343,60 @@ namespace PersonalWebsite.Controllers
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
-                    ViewBag.ReturnUrl = returnUrl;
+                    //ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    return await ExternalLoginConfirmation(new ExternalLoginConfirmationViewModel() { ReturnUrl = returnUrl, Email = loginInfo.Email });
             }
         }
 
-        //
         // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model)
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Manage");
+                return RedirectToLocal(model.ReturnUrl);
             }
 
-            if (ModelState.IsValid)
+            // Get the information about the user from the external login provider
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            if (loginInfo == null)
             {
-                // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
+                return View("ExternalLoginFailure");
+            }
+            ApplicationUser existingUser = await UserManager.FindByEmailAsync(loginInfo.Email);
+            if (existingUser != null)
+            {
+                var existingLogins = await UserManager.GetLoginsAsync(existingUser.Id);
+                // Another user with the same email exists
+                ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel() { ReturnUrl = model.ReturnUrl, Email = loginInfo.Email, ExistingLogins = existingLogins });
+            }
+
+            var user = new ApplicationUser { UserName = loginInfo.DefaultUserName, Email = loginInfo.Email };
+            var result = await UserManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                result = await UserManager.AddLoginAsync(user.Id, loginInfo.Login);
                 if (result.Succeeded)
                 {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    // This must be done for claim changes to be included in the current app cookie? Why MVC...
+                    var authenticationContext = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
+                    if (authenticationContext != null)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        AuthenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(
+                            await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie),
+                            authenticationContext.Properties);
                     }
+                    return RedirectToLocal(model.ReturnUrl);
                 }
-                AddErrors(result);
             }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
+            AddErrors(result);
+            // Some user creation error
+            return View("ExternalLoginFailure");
         }
 
         //

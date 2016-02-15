@@ -15,6 +15,8 @@ namespace PersonalWebsite.Areas.Blog.Controllers
 {
     public class CommentsController : Controller
     {
+        private BlogDbContext GetDb() { return this.GetDb<BlogDbContext>(); }
+
         // GET: Blog/Comments/Details/5
         [Authorize(Roles="Admin,Moderator")]
         public async Task<ActionResult> Details(int? id)
@@ -23,7 +25,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = await this.GetDb().Comments.FindAsync(id);
+            Comment comment = await GetDb().Comments.FindAsync(id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -39,38 +41,43 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         [Authorize]
         public async Task<ActionResult> Create([Bind(Include = "PostID,ParentCommentID,Content")] CommentView commentView)
         {
-            if (ModelState.IsValid)
+            string userId = User.Identity.GetUserId();
+            if (ModelState.IsValid && await GetDb().Posts.AnyAsync(p =>
+                    p.PostID == commentView.PostID && (p.CreatedOn != null || p.AuthorID == userId))
+               &&
+               (commentView.ParentCommentID == null || await GetDb().Comments.AnyAsync(c =>
+                    c.CommentID == commentView.ParentCommentID)))
             {
                 Comment comment = new Comment();
-                if (!await this.GetDb().Posts.AnyAsync(p => p.PostID == commentView.PostID))
+                if (!await GetDb().Posts.AnyAsync(p => p.PostID == commentView.PostID))
                     return new EmptyResult();
                 comment.PostID = commentView.PostID;
-                if (await this.GetDb().Comments.AnyAsync(c => c.CommentID == commentView.ParentCommentID))
+                if (await GetDb().Comments.AnyAsync(c => c.CommentID == commentView.ParentCommentID))
                     comment.ParentCommentID = commentView.ParentCommentID;
                 comment.AuthorID = User.Identity.GetUserId();
                 comment.CreatedOn = new DateTimeOffset(DateTime.Now);
-                comment = this.GetDb().Comments.Add(comment);
-                await this.GetDb().SaveChangesAsync();
+                comment = GetDb().Comments.Add(comment);
+                await GetDb().SaveChangesAsync();
 
                 CommentContent commentContent = new CommentContent();
                 commentContent.CommentID = comment.CommentID;
                 commentContent.Content = commentView.Content;
-                this.GetDb().CommentContents.Add(commentContent);
-                await this.GetDb().SaveChangesAsync();
+                GetDb().CommentContents.Add(commentContent);
+                await GetDb().SaveChangesAsync();
                 return PartialView("Comments/_CommentPartial", comment);
             }
             return new EmptyResult();
         }
 
         // GET: Blog/Comments/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Admin,Moderator")]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = await this.GetDb().Comments.FindAsync(id);
+            Comment comment = await GetDb().Comments.FindAsync(id);
             if (comment == null)
             {
                 return new EmptyResult();
@@ -85,10 +92,10 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles="Admin,Moderator")]
         public async Task<ActionResult> Edit([Bind(Include = "TempTokens,Content,UpdateReason,IsDeleted")] EditedCommentView commentView)
         {
-            Comment comment = await this.GetDb().Comments.FindAsync(this.GetTemp<int>(commentView, "CommentID"));
+            Comment comment = await GetDb().Comments.FindAsync(this.GetTemp<int>(commentView, "CommentID"));
             if (comment == null)
             {
                 this.ClearTemp(commentView);
@@ -103,9 +110,9 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 commentContent.UpdateReason = commentView.UpdateReason;
                 commentContent.IsDeleted = commentView.IsDeleted;
                 commentContent.Content = commentView.Content;
-                this.GetDb().CommentContents.Add(commentContent);
+                GetDb().CommentContents.Add(commentContent);
                 this.ClearTemp(commentView);
-                await this.GetDb().SaveChangesAsync();
+                await GetDb().SaveChangesAsync();
             }
             return PartialView("Comments/_CommentPartial", comment);
             /*
@@ -154,17 +161,17 @@ namespace PersonalWebsite.Areas.Blog.Controllers
                 postView.DoPublish = false;
             postView.Title = post.Title;
              */
-            return View();
+            //return View();
         }
         // GET: Blog/Comments/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin,Moderator")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Post post = await this.GetDb().Posts.FindAsync(id);
+            Post post = await GetDb().Posts.FindAsync(id);
             if (post == null)
             {
                 return HttpNotFound();
@@ -177,7 +184,7 @@ namespace PersonalWebsite.Areas.Blog.Controllers
         // POST: Blog/Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin,Moderator")]
         public async Task<ActionResult> DeleteConfirmed([Bind(Include = "TempTokens,UpdateReason")] EditedCommentView commentView)
         {
             /*

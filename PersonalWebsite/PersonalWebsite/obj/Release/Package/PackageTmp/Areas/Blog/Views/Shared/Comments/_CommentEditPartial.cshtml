@@ -1,0 +1,33 @@
+﻿@using PersonalWebsite.Models
+@model PersonalWebsite.Areas.Blog.Models.EditedCommentView
+
+<div class="sub-container-inner row" id="commentEditContainer">
+    <div class="col-xs-3">
+        @{
+            // MVC is horrible at times; without this explicit clearing of the ViewData, it will try to pass the CommentView to '_UserAvatarPartial', without any typechecking
+            Html.RenderPartial("_UserAvatarPartial", null, new ViewDataDictionary());
+        }
+        <h4 style="text-align:left">@User.Identity.Name</h4>
+    </div>
+    <div class="col-xs-9">
+        @using (Ajax.BeginForm("Edit", "Comments", new { area = "Blog" },
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.ReplaceWith,
+                UpdateTargetId = "commentEditContainer",
+                OnSuccess = "window.RunTinyMCE"
+            }, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            Html.RenderPartial("_TempTokensPartial", Model.TempTokens);
+            Html.RenderPartial("Comments/_CommentModifyPartial", Model);
+            <div class="form-group">
+                <div class="col-md-offset-10 col-md-2">
+                    <input type="submit" value="Submit" class="btn btn-default" style="width: 100%;" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

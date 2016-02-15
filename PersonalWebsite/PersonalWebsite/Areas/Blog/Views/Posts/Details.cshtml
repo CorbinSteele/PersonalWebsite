@@ -4,6 +4,7 @@
 
 @{
     ViewBag.Title = ": " + @Model.Title;
+    ApplicationUser author = Model.GetAuthor(this.GetUserManager());
 }
 
 <h2>@Model.Title</h2>
@@ -27,16 +28,23 @@
     <div class="row" style="margin-top: -15px;">
         <div class="col-xs-12">
             <div class="col-xs-offset-1 @(Model.Content.UpdatedOn == null ? "col-xs-7 col-sm-8 col-lg-9" : "col-xs-3 col-sm-5 col-lg-7")">
-                <h3 style="text-align:left">by @Model.Author.FirstName @Model.Author.LastName</h3>
+                <h3 style="text-align:left">by @author.UserName</h3>
             </div>
             <div class="col-xs-4 col-sm-3 col-lg-2">
                 <h4 style="text-align:center">
-                    <b>Posted</b>
-                    <hr style="margin: 2px 0px 0px;" />
-                    <small>
-                        @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.CreatedOn.Value.Month)
-                        @Model.CreatedOn.Value.Day, @Model.CreatedOn.Value.Year
-                    </small>
+                    @if (Model.CreatedOn != null)
+                    {
+                        <b>Posted</b>
+                        <hr style="margin: 2px 0px 0px;" />
+                        <small>
+                            @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Model.CreatedOn.Value.Month)
+                            @Model.CreatedOn.Value.Day, @Model.CreatedOn.Value.Year
+                        </small>
+                    }
+                    else
+                    {
+                        <b class="text-warning">Not Posted</b>
+                    }
                 </h4>
             </div>
             @if (Model.Content.UpdatedOn != null)
