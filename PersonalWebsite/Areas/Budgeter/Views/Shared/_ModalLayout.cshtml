@@ -1,0 +1,21 @@
+﻿@model PersonalWebsite.Models.ITempable
+
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">@ViewBag.Title</h4>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        if (Model != null) {Html.RenderPartial("_TempTokensPartial", Model.TempTokens);}
+        @RenderBody()
+
+        <div class="modal-footer">
+            <div class="col-xs-6">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    }
+</div>

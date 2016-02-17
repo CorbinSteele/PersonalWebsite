@@ -1,0 +1,66 @@
+﻿.sub-container-outer { position:relative; padding:1rem; background:#222222; box-shadow:0px 0px 1rem 1rem #060606 inset; }
+.sub-container-inner { position:relative; margin:1rem; padding:1rem 2rem; background:#060606; box-shadow:0px 0px 1rem 1rem #222222 inset; }
+.navbar-brand { min-width: 100px; }
+.icon { font-size:50px; text-align:center; }
+.well { margin: 0px 30px; padding: 10px 19px; }
+.padded { margin-bottom: 20px; }
+.resume-items { padding: 30px 20px; }
+.resume-item > p { font-size: 15.5px; }
+.landing-text > a > h2
+{
+    font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
+    padding-top: 30px;
+}
+.title-text > h2
+{
+    font-family: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
+    color: #2a9fd6;
+    margin-bottom: 10px;
+}
+input[type="checkbox"].form-checkbox
+{
+    width: 38px;
+    margin: 0px;
+    -webkit-appearance: none;
+}
+input[type="checkbox"].form-checkbox:checked
+{
+    -webkit-appearance: checkbox;
+}
+body.Home
+{
+    background: url('/images/moon.jpg');
+    background-size: 150%;
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-color: black;
+}
+html { height:100%; }
+body { min-height:100%; position:relative; }
+.padded-body {padding-top: 70px; padding-bottom:140px; }
+footer { position:absolute; bottom:0px; width:100%; padding: 14px; }
+h2 { margin-bottom:30px; text-align:center; }
+h3 { text-align:center; }
+p { font-size:1.8rem; line-height: 1.35; margin: 10px; color: #888888; }
+img { display:block; margin:10px auto 20px; }
+dl { margin:1rem 2rem; }
+dt { text-align:left; }
+dd { margin:0rem 1rem 1rem; text-align:left; }
+span.sub-container-link { position:absolute; width:100%; height:100%; top:0; left: 0; z-index: 1; }
+span.sub-container-link.outlined:hover { outline: 1px dotted #2A6496; }
+.navbar-inverse .navbar-nav>li>a:focus { color: #888888; }
+#intro { font-size: 1.8rem}
+
+@media (min-width: 624px) {
+}
+@media (min-width: 768px) {
+    .padded-body { padding-bottom:90px; }
+    p { font-size:17px; line-height: 1.15 }
+}
+@media (min-width: 992px) {
+    p { font-size:21px; line-height: 1.35 }
+    .modal-xl { width: 990px; }
+}
+@media (min-width: 1200px) {
+    p { font-size:25px; }
+}
