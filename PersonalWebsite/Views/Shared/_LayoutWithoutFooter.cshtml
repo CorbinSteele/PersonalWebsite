@@ -6,10 +6,10 @@
     <title>@("Corbin Steele - " + ViewBag.Title)</title>
     @Styles.Render("~/bundles/css")
     @RenderSection("Styles", false)
-    @Scripts.Render("~/bundles/js")
+    @*@Scripts.Render("~/bundles/js")*@
     @RenderSection("Scripts", false)
 </head>
-<body class="@ViewBag.Title padded-body">
+<body class="@ViewBag.Title">
     @{
         Html.RenderPartial("_HeaderPartial");
         @RenderBody();

@@ -1,0 +1,83 @@
+<div class="page page-households" data-ng-controller="householdsCtrl">
+    <div class="row">
+        <div class="col-xs-12" data-ng-repeat="household in households">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="position: relative; text-align: center;">
+                    <strong ng-hide="household.edit">{{household.name}}</strong>
+                    <input type="text" contenteditable="true" id="householdName-{{$index}}" ng-model="household.name" ng-show="household.edit" ng-blur="commitName($index)"
+                           style="border: none; font-weight: bold; text-transform: uppercase; text-align: center; margin: -4px 0px;
+                                  background-color: rgb(66, 139, 202); box-shadow: 0px 0px 15px 10px rgba(0, 0, 0, 0.2), inset 0px 0px 3px 0px rgba(0, 0, 0, 0.2);"
+                           onkeyup="if (!this.savesize) this.savesize = this.size; this.size = Math.max(this.savesize, this.value.length);" />
+                    <div class="themify-icons" style="width: 0px; position: absolute; right: 37px; top: -37px; z-index: 1;">
+                        <div class="icon-container">
+
+                            <div class="dropdown">
+                                <span class="ti-settings dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
+                                <ul class="dropdown-menu pull-right" role="menu" style="right: -37px; top: 68px;">
+                                    <li><a href="#" ng-click="editName($index)">Edit Name</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Leave Household</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" style="padding: 0px; text-align: center; background-color: #181818;">
+                    <div class="col-xs-4 panel-default" style="padding:0px;">
+                        <div class="panel-heading">
+                            <h4 class="text-primary">Current Budget</h4>
+                        </div>
+                        <div data-echarts data-options="pie1.options" style="height: 175px;"></div>
+                    </div>
+                    <div class="col-xs-4 panel-default" style="padding:0px;">
+                        <div class="panel-heading" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
+                            <h4 class="text-primary">Members</h4>
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr data-ng-repeat="user in household.users" ng-click="goToUser($index)">
+                                    <td style="border-top: 0px;">
+                                        <img class="img img-responsive" ng-src="{{user.avatar}}"
+                                             style="margin-bottom: 10px; display: inline; margin: 0px 5px;" width="30" />
+                                        {{user.name}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-4 panel-default" style="padding:0px;">
+                        <div class="panel-heading text-primary">
+                            <h4 class="text-primary">Accounts</h4>
+                        </div>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr data-ng-repeat="account in household.accounts" ng-click="goToAccount($index)">
+                                    <td style="border-top: 0px;"><strong>{{account.name}}: </strong>${{account.balance}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-xs-12" style="padding: 0px;">
+                        <div class="col-xs-offset-4 col-xs-4" style="position: absolute; bottom: 15px;">
+                            <button class=" btn btn-success" ng-click="inviteMember($index)" style="width: 60%;">Invite New Member</button>
+                        </div>
+                        <div class="col-xs-offset-8 col-xs-4" style="position: absolute; bottom: 15px;">
+                            <button class=" btn btn-success" ng-click="addAccount($index)" style="width: 60%;">Add New Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-success" ng-click="createHousehold()" style="width: 100%;">Create New Household</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="{{modal.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="left: 0px;" ng-bind-html="modal.html">
+            <!--Contains modals as needed-->
+        </div>
+    </div>
+</div>

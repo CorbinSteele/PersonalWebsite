@@ -36,8 +36,8 @@ body.Home
     background-color: black;
 }
 html { height:100%; }
-body { min-height:100%; position:relative; }
-.padded-body {padding-top: 70px; padding-bottom:140px; }
+body { min-height:100%; position:relative; padding-top: 50px; }
+.padded-body { padding-top: 70px; padding-bottom:140px; }
 footer { position:absolute; bottom:0px; width:100%; padding: 14px; }
 h2 { margin-bottom:30px; text-align:center; }
 h3 { text-align:center; }

@@ -45,9 +45,10 @@ namespace PersonalWebsite
                       "~/Areas/Budgeter/Content/main.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/Budgeter/js").Include(
-                        "~/Areas/Budgeter/Scripts/vendor.js",
-                        "~/Areas/Budgeter/Scripts/ui.js",
-                        "~/Areas/Budgeter/Scripts/app.js"));
+                        "~/Areas/Budgeter/NgApp/scripts/vendor.js",
+                        "~/Areas/Budgeter/NgApp/scripts/ui.js",
+                        "~/Areas/Budgeter/NgApp/scripts/app.js",
+                        "~/Scripts/bootstrap.js"));
 
             /*bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));

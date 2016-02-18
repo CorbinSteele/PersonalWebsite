@@ -16,9 +16,15 @@ namespace PersonalWebsite.Areas.Budgeter
         {
             context.MapRoute(
                 "Budgeter_Default",
-                "Budgeter/{controller}/{action}/{id}",
+                "Budgeter/api/{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional },
                 new [] { "PersonalWebsite.Areas.Budgeter.Controllers" }
+            );
+            context.MapRoute(
+                "Budgeter_NgApp",
+                "Budgeter/{*.}",
+                new { controller = "Home", action = "Index" },
+                new[] { "PersonalWebsite.Areas.Budgeter.Controllers" }
             );
         }
     }
