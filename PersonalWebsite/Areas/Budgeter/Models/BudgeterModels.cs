@@ -21,6 +21,14 @@ namespace PersonalWebsite.Areas.Budgeter.Models
         {
             return UserHouseholds.Select(uh => uh.GetUser(userManager));
         }
+        public bool HasMemberById(string id)
+        {
+            return UserHouseholds.Any(uh => uh.UserID == id);
+        }
+        public static System.Linq.Expressions.Expression<Func<Household, bool>> HasMemberByIdLinq(string id)
+        {
+            return h => h.UserHouseholds.Any(uh => uh.UserID == id);
+        }
     }
     public class UserHousehold
     {
@@ -41,12 +49,17 @@ namespace PersonalWebsite.Areas.Budgeter.Models
     }
     public class Account
     {
+        public Account()
+        {
+            this.Categories = new HashSet<Category>();
+        }
         public int AccountID { get; set; }
         public int HouseholdID { get; set; }
         public string Name { get; set; }
         public double ReconciledBalance { get; set; }
 
-        public Household Household { get; set; }
+        public virtual Household Household { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
     public class Category
     {

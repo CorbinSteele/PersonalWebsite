@@ -14,11 +14,13 @@ namespace PersonalWebsite
                       "~/Content/zocial.css",
                       "~/Content/custom.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jquery-js").Include(
                       "~/Scripts/jquery-1.10.2.js",
                       "~/Scripts/jquery.validate.js",
                       "~/Scripts/jquery.validate.unobtrusive.js",
-                      "~/Scripts/jquery.unobtrusive-ajax.js",
+                      "~/Scripts/jquery.unobtrusive-ajax.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-js").Include(
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/bundles/Portfolio/css").Include(

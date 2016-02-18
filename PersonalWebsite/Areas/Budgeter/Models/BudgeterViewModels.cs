@@ -19,4 +19,11 @@ namespace PersonalWebsite.Areas.Budgeter.Models
         [Required]
         public string Email { get; set; }
     }
+    public class AddAccountView : SimpleTempable
+    {
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public double Balance { get; set; }
+    }
 }

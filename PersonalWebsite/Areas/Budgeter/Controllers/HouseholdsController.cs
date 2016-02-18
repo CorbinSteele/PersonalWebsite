@@ -19,29 +19,36 @@ namespace PersonalWebsite.Areas.Budgeter.Controllers
         private const bool DEBUG = false;
         private const string USER_ID_DEBUG = "e1a47aaa-abe2-4b56-b0ac-baad239ae49c";
 
-        // POST: Budgeter/Households
+        // GET: Budgeter/api/Households
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> Index()
         {
             string userId = DEBUG ? USER_ID_DEBUG : User.Identity.GetUserId();
-            IList<Household> households = await GetDb().Households.Include("UserHouseholds").Where(h => h.UserHouseholds.Any(uh => uh.UserID == (DEBUG ? USER_ID_DEBUG : userId))).ToListAsync();
+            IList<Household> households = await GetDb().Households.Include("UserHouseholds").Where(Household.HasMemberByIdLinq(userId)).ToListAsync();
             // TODO: Convert to STORED PROCEDURE
-            return Json(households.Select(h => new {
-                householdId = h.HouseholdID,
-                userHouseholdId = h.UserHouseholds.First(uh => uh.UserID == userId).UserHouseholdID,
-                name = h.Name,
-                users = h.GetMembers(this.GetUserManager()).Select(u => new {
-                    id = u.Id,
-                    name = u.Claims.FirstOrDefault((c) => !c.ClaimType.StartsWith("http") && c.ClaimType.EndsWith("name")).ClaimValue,
-                    email = u.Email,
-                    avatar = u.Claims.FirstOrDefault(uc => uc.ClaimType == "urn:github:avatar").ClaimValue
-                }),
-                accounts = GetDb().Accounts.Where(a => h.HouseholdID == a.HouseholdID)
-            }));
+            return Json(households.Select(h => new
+                {
+                    householdId = h.HouseholdID,
+                    userHouseholdId = h.UserHouseholds.First(uh => uh.UserID == userId).UserHouseholdID,
+                    name = h.Name,
+                    users = h.GetMembers(this.GetUserManager()).Select(u => new
+                    {
+                        id = u.Id,
+                        name = u.Claims.FirstOrDefault((c) => !c.ClaimType.StartsWith("http") && c.ClaimType.EndsWith("name")).ClaimValue,
+                        email = u.Email,
+                        avatar = u.Claims.FirstOrDefault(uc => uc.ClaimType == "urn:github:avatar").ClaimValue
+                    }),
+                    accounts = GetDb().Accounts.Where(a => h.HouseholdID == a.HouseholdID).Select(a => new
+                    {
+                        id = a.AccountID,
+                        name = a.Name,
+                        balance = a.ReconciledBalance
+                    })
+                }));
         }
 
-        // POST: Budgeter/Households/Create
+        // POST: Budgeter/api/Households/Create
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> Create(HouseholdView householdView)
@@ -61,16 +68,16 @@ namespace PersonalWebsite.Areas.Budgeter.Controllers
             return Json(new { result = "Failed" });
         }
 
-        // POST: Budgeter/Households/Edit
+        // POST: Budgeter/api/Households/Edit
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> Edit(HouseholdView householdView, int? id)
         {
             if (id == null)
-                return Json(new { result = "Failure" });;
+                return Json(new { result = "Failure" });
             Household household = await GetDb().Households.FindAsync(id.GetValueOrDefault());
             string userId = DEBUG ? USER_ID_DEBUG : User.Identity.GetUserId();
-            if (household == null || !household.UserHouseholds.Any(uh => uh.UserID == userId))
+            if (household == null || !household.HasMemberById(userId))
                 return Json(new { result = "Failure" });
             household.Name = householdView.Name;
             await GetDb().SaveChangesAsync();
@@ -78,7 +85,7 @@ namespace PersonalWebsite.Areas.Budgeter.Controllers
             return Json(new { result = "Success" });
         }
 
-        // GET: Budgeter/Households/InviteMember/3
+        // GET: Budgeter/api/Households/InviteMember/3
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> InviteMember(int? id)
@@ -94,7 +101,7 @@ namespace PersonalWebsite.Areas.Budgeter.Controllers
             return PartialView("_InviteMemberPartial", invitationView);
         }
 
-        // POST: Budgeter/Households/InviteMember
+        // POST: Budgeter/api/Households/InviteMember
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]

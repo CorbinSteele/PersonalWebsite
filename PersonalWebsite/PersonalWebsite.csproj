@@ -188,6 +188,7 @@
     <Compile Include="Areas\About\AboutAreaRegistration.cs" />
     <Compile Include="Areas\About\Controllers\HomeController.cs" />
     <Compile Include="Areas\Budgeter\BudgeterAreaRegistration.cs" />
+    <Compile Include="Areas\Budgeter\Controllers\AccountsController.cs" />
     <Compile Include="Areas\Budgeter\Controllers\HomeController.cs" />
     <Compile Include="Areas\Budgeter\Controllers\HouseholdsController.cs" />
     <Compile Include="Areas\Budgeter\Models\BudgeterModels.cs" />
@@ -818,6 +819,7 @@
     <Content Include="Areas\Budgeter\NgApp\i18n\ru.json" />
     <Content Include="Areas\Budgeter\NgApp\i18n\zh.json" />
     <Content Include="Areas\Budgeter\NgApp\styles\ui\images\Flags PNG.zip" />
+    <Content Include="Areas\Budgeter\Views\Accounts\_AddAccountPartial.cshtml" />
     <None Include="Areas\CarFinder\Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

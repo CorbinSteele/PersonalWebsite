@@ -61,10 +61,14 @@ else
         });
         $("#userMenu a").click(function (e) {
             $(e.target).tab('show');
-        })
-        function RefreshPage(data) {
-            if (data === "Success")
-                window.location.href = "@HttpContext.Current.Request.RawUrl";
-        }
+        });
     </script>
 }
+
+<script>
+    function RefreshPage(data) {
+        if (data === "Success" || data.result === "Success")
+            window.location.href = "@HttpContext.Current.Request.RawUrl";
+        console.log(data);
+    }
+</script>
